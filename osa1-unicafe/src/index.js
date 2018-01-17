@@ -16,6 +16,9 @@ const Nappi = ({ handleClick, teksti }) => {
 }
 
 const Tilasto = ({ hyva, neutraali, huono }) => {
+  const ka = (hyva - huono) / (hyva + neutraali + huono)
+  const pos = 100 * (hyva / (hyva + neutraali + huono))
+
   return (
     <div>
       <table>
@@ -31,6 +34,14 @@ const Tilasto = ({ hyva, neutraali, huono }) => {
           <tr>
             <td>Huono:</td>
             <td>{huono}</td>
+          </tr>
+          <tr>
+            <td>Keskiarvo:</td>
+            <td>{ka}</td>
+          </tr>
+          <tr>
+            <td>Positiivisia:</td>
+            <td>{pos}%</td>
           </tr>
         </tbody>
       </table>
