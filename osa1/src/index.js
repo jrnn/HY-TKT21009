@@ -1,5 +1,5 @@
-import React from 'react'
-import ReactDOM from 'react-dom'
+import React from 'react';
+import ReactDOM from 'react-dom';
 
 const Otsikko = (props) => {
   return (
@@ -12,7 +12,7 @@ const Otsikko = (props) => {
 const Osa = (props) => {
   return (
     <div>
-      <p>{props.nimi} {props.tehtavia}</p>
+      <p>{props.osa.nimi} {props.osa.tehtavia}</p>
     </div>
   )
 }
@@ -20,41 +20,47 @@ const Osa = (props) => {
 const Sisalto = (props) => {
   return (
     <div>
-      <Osa nimi={props.osa1.nimi} tehtavia={props.osa1.tehtavia} />
-      <Osa nimi={props.osa2.nimi} tehtavia={props.osa2.tehtavia} />
-      <Osa nimi={props.osa3.nimi} tehtavia={props.osa3.tehtavia} />
+      <Osa osa={props.osat[0]} />
+      <Osa osa={props.osat[1]} />
+      <Osa osa={props.osat[2]} />
     </div>
   )
 }
 
 const Yhteensa = (props) => {
+  /* näiden summaamiseen on varmasti parempikin tapa mut mennään nyt näillä... */
+  var yht = 0;
+  props.osat.map(o => yht += o.tehtavia);
+
   return (
     <div>
-      <p>yhteensä {props.yhteensa} tehtävää</p>
+      <p>yhteensä {yht} tehtävää</p>
     </div>
   )
 }
 
 const App = () => {
-  const kurssi = 'Half Stack -sovelluskehitys'
-  const osa1 = {
-    nimi : 'Reactin perusteet',
-    tehtavia : 10
-  }
-  const osa2 = {
-    nimi : 'Tiedonvälitys propseilla',
-    tehtavia : 7
-  }
-  const osa3 = {
-    nimi : 'Komponenttien tila',
-    tehtavia : 14
-  }
+  const kurssi = 'Half Stack -sovelluskehitys';
+  const osat = [
+    {
+      nimi : 'Reactin perusteet',
+      tehtavia : 10
+    },
+    {
+      nimi : 'Tiedonvälitys propseilla',
+      tehtavia : 7
+    },
+    {
+      nimi : 'Komponenttien tila',
+      tehtavia : 14
+    }
+  ];
 
   return (
     <div>
       <Otsikko otsikko={kurssi} />
-      <Sisalto osa1={osa1} osa2={osa2} osa3={osa3} />
-      <Yhteensa yhteensa={osa1.tehtavia + osa2.tehtavia + osa3.tehtavia} />
+      <Sisalto osat={osat} />
+      <Yhteensa osat={osat} />
     </div>
   )
 }
@@ -62,4 +68,4 @@ const App = () => {
 ReactDOM.render(
   <App />,
   document.getElementById('root')
-)
+);
