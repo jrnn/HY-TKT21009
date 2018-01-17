@@ -23,8 +23,13 @@ const Statistic = ({ stat, value }) => {
   )
 }
 
-const Statistics = ({ hyva, neutraali, huono }) => {
-  if ((hyva + neutraali + huono) === 0) {
+const Statistics = ({ feedback }) => {
+  let hyv = feedback[0]
+  let neu = feedback[1]
+  let huo = feedback[2]
+  let ttl = hyv + neu + huo
+
+  if (ttl === 0) {
     return (
       <div>
         <p>(Erhmagerd! Yhtään palautetta ei ole annettu!)</p>
@@ -32,15 +37,15 @@ const Statistics = ({ hyva, neutraali, huono }) => {
     )
   }
 
-  const avg = (hyva - huono) / (hyva + neutraali + huono)
-  const pos = 100 * (hyva / (hyva + neutraali + huono))
+  let avg = (hyv - huo) / ttl
+  let pos = 100 * hyv / ttl
 
   return (
     <div>
       <ul>
-        <Statistic stat="Hyvä" value={hyva} />
-        <Statistic stat="Neutraali" value={neutraali} />
-        <Statistic stat="Huono" value={huono} />
+        <Statistic stat="Hyvä" value={hyv} />
+        <Statistic stat="Neutraali" value={neu} />
+        <Statistic stat="Huono" value={huo} />
         <Statistic stat="Keskiarvo" value={avg} />
         <Statistic stat="Positiivisia" value={pos + "%"} />
       </ul>
@@ -52,28 +57,18 @@ class App extends React.Component {
   constructor(props) {
     super(props)
     this.state = {
-      hyva : 0,
-      neutraali : 0,
-      huono : 0
+      // tallenna palautteet taulukkoon seuraavasti
+      // [0] = hyva ; [1] = neutraali ; [2] = huono
+      feedback : [0, 0, 0]
     }
   }
 
-  clickHyva = () => {
-    this.setState({
-      hyva : this.state.hyva + 1
-    })
-  }
-
-  clickNeutraali = () => {
-    this.setState({
-      neutraali : this.state.neutraali + 1
-    })
-  }
-
-  clickHuono = () => {
-    this.setState({
-      huono : this.state.huono + 1
-    })
+  incrementFeedback = (index) => {
+    return () => {
+      let feedback = this.state.feedback.slice()
+      feedback[index]++
+      this.setState({ feedback : feedback })
+    }
   }
 
   render() {
@@ -81,23 +76,19 @@ class App extends React.Component {
       <div>
         <Title title="Unicafe | Anna palautetta" />
         <Button
-          handleClick={this.clickHyva}
+          handleClick={this.incrementFeedback(0)}
           text="Hyvä"
         />
         <Button
-          handleClick={this.clickNeutraali}
+          handleClick={this.incrementFeedback(1)}
           text="Neutraali"
         />
         <Button
-          handleClick={this.clickHuono}
+          handleClick={this.incrementFeedback(2)}
           text="Huono"
         />
         <Title title="Statistiikka" />
-        <Statistics
-          hyva={this.state.hyva}
-          neutraali={this.state.neutraali}
-          huono={this.state.huono}
-        />
+        <Statistics feedback={this.state.feedback} />
       </div>
     )
   }
