@@ -17,16 +17,14 @@ const Button = ({ handleClick, text }) => {
 
 const Statistic = ({ stat, value }) => {
   return (
-    <div>
-      <li>{stat} : {value}</li>
-    </div>
+    <tr>
+      <td>{stat}</td>
+      <td>{value}</td>
+    </tr>
   )
 }
 
-const Statistics = ({ feedback }) => {
-  let hyv = feedback[0]
-  let neu = feedback[1]
-  let huo = feedback[2]
+const Statistics = ({ hyv, neu, huo }) => {
   let ttl = hyv + neu + huo
 
   if (ttl === 0) {
@@ -37,18 +35,17 @@ const Statistics = ({ feedback }) => {
     )
   }
 
-  let avg = (hyv - huo) / ttl
-  let pos = 100 * hyv / ttl
-
   return (
     <div>
-      <ul>
-        <Statistic stat="Hyvä" value={hyv} />
-        <Statistic stat="Neutraali" value={neu} />
-        <Statistic stat="Huono" value={huo} />
-        <Statistic stat="Keskiarvo" value={avg} />
-        <Statistic stat="Positiivisia" value={pos + "%"} />
-      </ul>
+      <table>
+        <tbody>
+          <Statistic stat="Hyvä" value={hyv} />
+          <Statistic stat="Neutraali" value={neu} />
+          <Statistic stat="Huono" value={huo} />
+          <Statistic stat="Keskiarvo" value={(hyv - huo) / ttl} />
+          <Statistic stat="Positiivisia" value={(100 * hyv / ttl) + "%"} />
+        </tbody>
+      </table>
     </div>
   )
 }
@@ -57,9 +54,7 @@ class App extends React.Component {
   constructor(props) {
     super(props)
     this.state = {
-      // tallenna palautteet taulukkoon seuraavasti
-      // [0] = hyva ; [1] = neutraali ; [2] = huono
-      feedback : [0, 0, 0]
+      feedback : [0, 0, 0] // [0] = hyva ; [1] = neutraali ; [2] = huono
     }
   }
 
@@ -88,7 +83,11 @@ class App extends React.Component {
           text="Huono"
         />
         <Title title="Statistiikka" />
-        <Statistics feedback={this.state.feedback} />
+        <Statistics
+          hyv={this.state.feedback[0]}
+          neu={this.state.feedback[1]}
+          huo={this.state.feedback[2]}
+        />
       </div>
     )
   }
