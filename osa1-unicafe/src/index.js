@@ -1,50 +1,41 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
 
-const Otsikko = (props) => {
+const Title = ({ title }) => {
   return (
     <div>
-      <h3>{props.otsikko}</h3>
+      <h3>{title}</h3>
     </div>
   )
 }
 
-const Nappi = ({ handleClick, teksti }) => {
+const Button = ({ handleClick, text }) => {
   return (
-    <input type="button" onClick={handleClick} value={teksti} />
+    <input type="button" onClick={handleClick} value={text} />
   )
 }
 
-const Tilasto = ({ hyva, neutraali, huono }) => {
-  const ka = (hyva - huono) / (hyva + neutraali + huono)
+const Statistic = ({ stat, value }) => {
+  return (
+    <div>
+      <li>{stat} : {value}</li>
+    </div>
+  )
+}
+
+const Statistics = ({ hyva, neutraali, huono }) => {
+  const avg = (hyva - huono) / (hyva + neutraali + huono)
   const pos = 100 * (hyva / (hyva + neutraali + huono))
 
   return (
     <div>
-      <table>
-        <tbody>
-          <tr>
-            <td>Hyvä:</td>
-            <td>{hyva}</td>
-          </tr>
-          <tr>
-            <td>Neutraali:</td>
-            <td>{neutraali}</td>
-          </tr>
-          <tr>
-            <td>Huono:</td>
-            <td>{huono}</td>
-          </tr>
-          <tr>
-            <td>Keskiarvo:</td>
-            <td>{ka}</td>
-          </tr>
-          <tr>
-            <td>Positiivisia:</td>
-            <td>{pos}%</td>
-          </tr>
-        </tbody>
-      </table>
+      <ul>
+        <Statistic stat="Hyvä" value={hyva} />
+        <Statistic stat="Neutraali" value={neutraali} />
+        <Statistic stat="Huono" value={huono} />
+        <Statistic stat="Keskiarvo" value={avg} />
+        <Statistic stat="Positiivisia" value={pos + "%"} />
+      </ul>
     </div>
   )
 }
@@ -80,21 +71,21 @@ class App extends React.Component {
   render() {
     return (
       <div>
-        <Otsikko otsikko="Unicafe | Anna palautetta" />
-        <Nappi
+        <Title title="Unicafe | Anna palautetta" />
+        <Button
           handleClick={this.clickHyva}
-          teksti="Hyvä"
+          text="Hyvä"
         />
-        <Nappi
+        <Button
           handleClick={this.clickNeutraali}
-          teksti="Neutraali"
+          text="Neutraali"
         />
-        <Nappi
+        <Button
           handleClick={this.clickHuono}
-          teksti="Huono"
+          text="Huono"
         />
-        <Otsikko otsikko="Statistiikka" />
-        <Tilasto
+        <Title title="Statistiikka" />
+        <Statistics
           hyva={this.state.hyva}
           neutraali={this.state.neutraali}
           huono={this.state.huono}
