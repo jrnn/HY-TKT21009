@@ -24,6 +24,14 @@ const Statistic = ({ stat, value }) => {
 }
 
 const Statistics = ({ hyva, neutraali, huono }) => {
+  if ((hyva + neutraali + huono) === 0) {
+    return (
+      <div>
+        <p>(Erhmagerd! Yhtään palautetta ei ole annettu!)</p>
+      </div>
+    )
+  }
+
   const avg = (hyva - huono) / (hyva + neutraali + huono)
   const pos = 100 * (hyva / (hyva + neutraali + huono))
 
