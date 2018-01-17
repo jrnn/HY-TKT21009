@@ -31,6 +31,7 @@ class App extends React.Component {
   render() {
     return (
       <div>
+        <h2>Anecdote library</h2>
         <Display a={this.state.anecdotes[this.state.selected]} />
         <Button
           handleClick={this.upvote}
@@ -40,6 +41,7 @@ class App extends React.Component {
           handleClick={this.randomAnecdote}
           text="Keep 'em coming!"
         />
+        <Leaderboard anecdotes={this.state.anecdotes} />
       </div>
     )
   }
@@ -57,6 +59,22 @@ const Display = ({ a }) => {
 const Button = ({ handleClick, text }) => {
   return (
     <input type="button" onClick={handleClick} value={text} />
+  )
+}
+
+const Leaderboard = ({ anecdotes }) => {
+  let best = anecdotes[0]
+  anecdotes.forEach(function(a, idx) {
+    if (a.votes > best.votes) {
+      best = a
+    }
+  })
+
+  return (
+    <div>
+      <h4>Anecdote with most votes:</h4>
+      <p>{best.text}</p>
+    </div>
   )
 }
 
