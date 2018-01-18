@@ -24,6 +24,11 @@ const App = () => {
         id : 4,
         nimi : 'Komponenttien määrittely moduuleissa',
         tehtavia : 8
+      },
+      {
+        id : 5,
+        nimi : 'Taulukossa olevan datan renderöinti',
+        tehtavia : 11
       }
     ]
   };
@@ -38,13 +43,14 @@ const Kurssi = ({ kurssi }) => {
     <div>
       <Otsikko otsikko={kurssi.nimi} />
       <Sisalto kurssi={kurssi} />
+      <Yhteensa kurssi={kurssi} />
     </div>
   )
 }
 
 const Otsikko = ({ otsikko }) => {
   return (
-    <h1>{otsikko}</h1>
+    <h2>{otsikko}</h2>
   )
 }
 
@@ -63,6 +69,16 @@ const Sisalto = ({ kurssi }) => {
 const Osa = ({ osa }) => {
   return (
     <p>{osa.nimi} {osa.tehtavia}</p>
+  )
+}
+
+const Yhteensa = ({ kurssi }) => {
+  const yhteensa = kurssi.osat
+    .map(osa => osa.tehtavia)
+    .reduce((acc, i) => acc + i)
+
+  return (
+    <p><strong>Yhteensä {yhteensa} tehtävää</strong></p>
   )
 }
 
