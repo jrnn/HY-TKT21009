@@ -1,54 +1,17 @@
 import React from 'react'
+import Form from './components/Form'
+import Input from './components/Input'
+import Persons from './components/Persons'
 
 class App extends React.Component {
   constructor(props) {
     super(props)
     this.state = {
-      persons : [
-        {
-          id : 1,
-          name : "Spengebeb Squrupunts",
-          number : "+1 42 666 1337"
-        },
-        {
-          id : 2,
-          name : "Chuck Norris",
-          number : "none of your business"
-        },
-        {
-          id : 3,
-          name : "Spengebeb Chucknorris",
-          number : "+358 40 123 4567"
-        },
-        {
-          id : 4,
-          name : "Spengebeb Nuckchorris",
-          number : "N/A"
-        }
-      ],
+      persons : props.persons,
       newName : "",
       newNumber : "",
       filter : ""
     }
-  }
-
-  listPersons = () => {
-    let s = this.state.filter.toLowerCase()
-
-    return (
-      <table>
-        <tbody>
-          {this.state.persons
-            .filter(p => p.name.toLowerCase().includes(s))
-            .map(p =>
-            <tr key={p.id}>
-              <td>{p.name}</td>
-              <td>{p.number}</td>
-            </tr>
-          )}
-        </tbody>
-      </table>
-    )
   }
 
   addPerson = (e) => {
@@ -60,7 +23,7 @@ class App extends React.Component {
     if (this.state.persons
       .map(p => p.name.toLowerCase())
       .includes(this.state.newName.toLowerCase())) {
-        alert("Voihan nenä! Nimi on jo varattu!")
+        alert("Voihan nenä! Nimi on jo käytössä!")
         return
     }
 
@@ -95,49 +58,36 @@ class App extends React.Component {
     return (
       <div>
         <h1>Puhelinluettelo</h1>
-        <div>
-          Rajaa näytettäviä:
-          <input
-            value={this.state.filter}
-            onChange={this.handleFilterChange}
-          />
-        </div>
+        <Input input={{
+          label : "Rajaa näytettäviä:",
+          value : this.state.filter,
+          onChange : this.handleFilterChange,
+          isTable : false
+        }}
+        />
         <h2>Lisää uusi</h2>
-        <div>
-          <form onSubmit={this.addPerson}>
-            <table>
-              <tbody>
-                <tr>
-                  <td>Nimi:</td>
-                  <td>
-                    <input
-                      value={this.state.newName}
-                      onChange={this.handleNameChange}
-                    />
-                  </td>
-                </tr>
-                <tr>
-                  <td>Numero:</td>
-                  <td>
-                    <input
-                      value={this.state.newNumber}
-                      onChange={this.handleNumberChange}
-                    />
-                  </td>
-                </tr>
-                <tr>
-                  <td>
-                    <input type="submit" value="Lisää" />
-                  </td>
-                </tr>
-              </tbody>
-            </table>
-          </form>
-        </div>
+        <Form
+          onSubmit={this.addPerson}
+          inputs={[
+            {
+              label : "Nimi:",
+              value : this.state.newName,
+              onChange : this.handleNameChange,
+              isTable : true
+            },
+            {
+              label : "Numero:",
+              value : this.state.newNumber,
+              onChange : this.handleNumberChange,
+              isTable : true
+            }
+          ]}
+        />
         <h2>Numerot</h2>
-        <div>
-          {this.listPersons()}
-        </div>
+        <Persons
+          persons={this.state.persons}
+          filter={this.state.filter}
+        />
       </div>
     )
   }
