@@ -20,6 +20,13 @@ class App extends React.Component {
   addPerson = (e) => {
     e.preventDefault()
 
+    if (this.state.persons
+      .map(p => p.name)
+      .includes(this.state.newName)) {
+        alert("Voihan nenä! Nimi on jo varattu!")
+        return
+    }
+
     let person = { name : this.state.newName }
     let persons = this.state.persons.concat(person)
 
