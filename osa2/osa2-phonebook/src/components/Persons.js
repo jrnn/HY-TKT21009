@@ -1,6 +1,6 @@
 import React from 'react'
 
-const Persons = ({ persons, filter }) => {
+const Persons = ({ persons, filter, handleClick }) => {
   return (
     <table>
       <tbody>
@@ -11,6 +11,13 @@ const Persons = ({ persons, filter }) => {
             <tr key={p.id}>
               <td>{p.name}</td>
               <td>{p.number}</td>
+              <td>
+                <input
+                  type="button"
+                  value="Poista"
+                  onClick={handleClick(p.id)}
+                />
+              </td>
             </tr>)
         }
       </tbody>

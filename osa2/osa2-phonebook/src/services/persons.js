@@ -28,4 +28,9 @@ const add = (person) => {
   return req.then(res => res.data)
 }
 
-export default { validate, getAll, add }
+const remove = (id) => {
+  let req = Axios.delete(url + "/" + id)
+  return req.then(res => res)
+}
+
+export default { validate, getAll, add, remove }

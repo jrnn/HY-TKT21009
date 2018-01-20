@@ -43,6 +43,20 @@ class App extends React.Component {
       })
   }
 
+  deletePerson = (id) => {
+    return () => {
+      if (!window.confirm("Ooks ny ihan varma?")) { return }
+
+      personService
+        .remove(id)
+        .then(res => {
+          if (res.status === 200) this.setState({
+            persons : this.state.persons.filter(p => (p.id !== id))
+          })
+        })
+    }
+  }
+
   handleNameChange = (e) => {
     this.setState({ newName : e.target.value })
   }
@@ -88,6 +102,7 @@ class App extends React.Component {
         <Persons
           persons={this.state.persons}
           filter={this.state.filter}
+          handleClick={this.deletePerson}
         />
       </div>
     )
