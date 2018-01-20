@@ -1,4 +1,5 @@
 import React from 'react'
+import Axios from 'axios'
 import Form from './components/Form'
 import Input from './components/Input'
 import Persons from './components/Persons'
@@ -7,18 +8,27 @@ class App extends React.Component {
   constructor(props) {
     super(props)
     this.state = {
-      persons : props.persons,
+      persons : [],
       newName : "",
       newNumber : "",
       filter : ""
     }
   }
 
+  componentWillMount() {
+    Axios
+      .get("http://localhost:3001/persons")
+      .then(res => this.setState({ persons : res.data }))
+  }
+
   addPerson = (e) => {
     e.preventDefault()
 
     if (this.state.newName === "" ||
-        this.state.newNumber === "") { return }
+        this.state.newNumber === "") {
+          alert("Ei tyhjiä syötteitä!")
+          return
+    }
 
     if (this.state.persons
       .map(p => p.name.toLowerCase())
