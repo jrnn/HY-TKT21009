@@ -38,18 +38,20 @@ class App extends React.Component {
     }
 
     let person = {
-      id : this.state.persons.length + 1,
       name : this.state.newName,
       number : this.state.newNumber
     }
 
-    let persons = this.state.persons.concat(person)
-
-    this.setState({
-      persons,
-      newName : "",
-      newNumber : ""
-    })
+    Axios
+      .post("http://localhost:3001/persons", person)
+      .then(res => {
+        console.log(res)
+        this.setState({
+          persons : this.state.persons.concat(res.data),
+          newName : "",
+          newNumber : ""
+        })
+      })
   }
 
   handleNameChange = (e) => {

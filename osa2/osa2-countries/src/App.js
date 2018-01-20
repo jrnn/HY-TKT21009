@@ -1,6 +1,7 @@
 import React from 'react'
 import Axios from 'axios'
-import CountryFilter from './components/CountryFilter'
+import Countries from './components/Countries'
+import InputField from './components/InputField'
 
 class App extends React.Component {
   constructor(props) {
@@ -24,14 +25,16 @@ class App extends React.Component {
   render() {
     return (
       <div>
-        Find countries:&nbsp;
-        <input
+        <InputField
+          label="Find countries:&nbsp;"
           value={this.state.lookup}
           onChange={this.handleSearchChange}
         />
-        <CountryFilter
-          countries={this.state.countries}
-          lookup={this.state.lookup}
+        <Countries countries={
+          this.state.countries
+            .filter(c => c.name.toLowerCase()
+              .includes(this.state.lookup.toLowerCase()))
+          }
         />
       </div>
     )
