@@ -1,8 +1,8 @@
 import React from 'react'
-import Axios from 'axios'
 import Form from './components/Form'
 import Input from './components/Input'
 import Persons from './components/Persons'
+import personService from './services/persons'
 
 class App extends React.Component {
   constructor(props) {
@@ -16,38 +16,27 @@ class App extends React.Component {
   }
 
   componentWillMount() {
-    Axios
-      .get("http://localhost:3001/persons")
-      .then(res => this.setState({ persons : res.data }))
+    personService
+      .getAll()
+      .then(persons => this.setState({ persons }))
   }
 
   addPerson = (e) => {
     e.preventDefault()
 
-    if (this.state.newName === "" ||
-        this.state.newNumber === "") {
-          alert("Ei tyhjiä syötteitä!")
-          return
-    }
+    let person = personService.validate(
+      this.state.newName,
+      this.state.newNumber,
+      this.state.persons
+    )
 
-    if (this.state.persons
-      .map(p => p.name.toLowerCase())
-      .includes(this.state.newName.toLowerCase())) {
-        alert("Voihan nenä! Nimi on jo käytössä!")
-        return
-    }
+    if (person === null) { return }
 
-    let person = {
-      name : this.state.newName,
-      number : this.state.newNumber
-    }
-
-    Axios
-      .post("http://localhost:3001/persons", person)
-      .then(res => {
-        console.log(res)
+    personService
+      .add(person)
+      .then(person => {
         this.setState({
-          persons : this.state.persons.concat(res.data),
+          persons : this.state.persons.concat(person),
           newName : "",
           newNumber : ""
         })
