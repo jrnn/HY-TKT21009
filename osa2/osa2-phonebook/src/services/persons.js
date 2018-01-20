@@ -8,11 +8,15 @@ const validate = (name, number, persons) => {
     return null
   }
 
-  if (persons
-    .map(p => p.name.toLowerCase())
-    .includes(name.toLowerCase())) {
-      alert("Voihan nenä! Nimi on jo käytössä!")
-      return null
+  persons = persons
+    .filter(p => (p.name.toLowerCase() === name.toLowerCase()))
+
+  if (persons.length > 0) {
+    let person = {...persons[0], number : number }
+
+    return window.confirm(person.name + " on jo luettelossa. Korvataanko vanha numero uudella?")
+      ? person
+      : null
   }
 
   return { name, number }
@@ -28,9 +32,14 @@ const add = (person) => {
   return req.then(res => res.data)
 }
 
+const update = (id, person) => {
+  let req = Axios.put(url + "/" + id, person)
+  return req.then(res => res.data)
+}
+
 const remove = (id) => {
   let req = Axios.delete(url + "/" + id)
   return req.then(res => res)
 }
 
-export default { validate, getAll, add, remove }
+export default { validate, getAll, add, update, remove }

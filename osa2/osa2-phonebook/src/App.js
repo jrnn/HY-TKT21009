@@ -30,22 +30,32 @@ class App extends React.Component {
       this.state.persons
     )
 
-    if (person === null) { return }
+    if (person == null) { return }
 
-    personService
-      .add(person)
-      .then(person => {
-        this.setState({
-          persons : this.state.persons.concat(person),
-          newName : "",
-          newNumber : ""
-        })
-      })
+    if (person.id == null) {
+      personService
+        .add(person)
+        .then(newPerson => this.setState({
+          persons : this.state.persons.concat(newPerson)
+        }))
+    } else {
+      personService
+        .update(person.id, person)
+        .then(changedPerson => this.setState({
+          persons : this.state.persons.map(p =>
+            (p.id !== person.id ? p : changedPerson))
+        }))
+    }
+
+    this.setState({
+      newName : "",
+      newNumber : ""
+    })
   }
 
   deletePerson = (id) => {
     return () => {
-      if (!window.confirm("Ooks ny ihan varma?")) { return }
+      if (!window.confirm("Ooks ny ihan varma kans?")) { return }
 
       personService
         .remove(id)
