@@ -1,4 +1,5 @@
 import React from 'react'
+import Alert from './components/Alert'
 import Form from './components/Form'
 import Input from './components/Input'
 import Persons from './components/Persons'
@@ -11,7 +12,8 @@ class App extends React.Component {
       persons : [],
       newName : "",
       newNumber : "",
-      filter : ""
+      filter : "",
+      alert : null
     }
   }
 
@@ -24,26 +26,39 @@ class App extends React.Component {
   addPerson = (e) => {
     e.preventDefault()
 
+    setTimeout(() => {
+      this.setState({ alert : null })
+    }, 5000)
+
     let person = personService.validate(
       this.state.newName,
       this.state.newNumber,
       this.state.persons
     )
 
-    if (person == null) { return }
+    if (person == null) {
+      this.setState({
+        alert : { msg : "Ei tyhjiä syötteitä!", type : "fail" }
+      })
+
+      return
+    }
 
     if (person.id == null) {
       personService
         .add(person)
         .then(newPerson => this.setState({
-          persons : this.state.persons.concat(newPerson)
+          persons : this.state.persons.concat(newPerson),
+          alert : { msg : "Henkilö lisätty puhelinluetteloon", type : "success" }
         }))
-    } else {
+    }
+    else {
       personService
         .update(person.id, person)
         .then(changedPerson => this.setState({
           persons : this.state.persons.map(p =>
-            (p.id !== person.id ? p : changedPerson))
+            (p.id !== person.id ? p : changedPerson)),
+            alert : { msg : "Henkilön tiedot päivitetty", type : "success" }
         }))
     }
 
@@ -59,11 +74,13 @@ class App extends React.Component {
 
       personService
         .remove(id)
-        .then(res => {
-          if (res.status === 200) this.setState({
-            persons : this.state.persons.filter(p => (p.id !== id))
-          })
-        })
+        .then(res => this.setState({
+            persons : this.state.persons.filter(p => (p.id !== id)),
+            alert : { msg : "Henkilö poistettu puhelinluettelosta", type : "success" }
+        }))
+        setTimeout(() => {
+          this.setState({ alert : null })
+        }, 5000)
     }
   }
 
@@ -82,38 +99,46 @@ class App extends React.Component {
   render() {
     return (
       <div>
-        <h1>Puhelinluettelo</h1>
-        <Input input={{
-          label : "Rajaa näytettäviä:",
-          value : this.state.filter,
-          onChange : this.handleFilterChange,
-          isTable : false
-        }}
-        />
-        <h2>Lisää uusi</h2>
-        <Form
-          onSubmit={this.addPerson}
-          inputs={[
-            {
-              label : "Nimi:",
-              value : this.state.newName,
-              onChange : this.handleNameChange,
-              isTable : true
-            },
-            {
-              label : "Numero:",
-              value : this.state.newNumber,
-              onChange : this.handleNumberChange,
-              isTable : true
-            }
-          ]}
-        />
-        <h2>Numerot</h2>
-        <Persons
-          persons={this.state.persons}
-          filter={this.state.filter}
-          handleClick={this.deletePerson}
-        />
+        <section>
+          <Alert alert={this.state.alert} />
+          <h1>Puhelinluettelo</h1>
+          <table>
+            <tbody>
+              <Input input={{
+                label : "Rajaa näytettäviä:",
+                value : this.state.filter,
+                onChange : this.handleFilterChange
+              }}
+              />
+            </tbody>
+          </table>
+        </section>
+        <section>
+          <h2>Lisää uusi</h2>
+          <Form
+            onSubmit={this.addPerson}
+            inputs={[
+              {
+                label : "Nimi:",
+                value : this.state.newName,
+                onChange : this.handleNameChange
+              },
+              {
+                label : "Numero:",
+                value : this.state.newNumber,
+                onChange : this.handleNumberChange
+              }
+            ]}
+          />
+        </section>
+        <section>
+          <h2>Numerot</h2>
+          <Persons
+            persons={this.state.persons}
+            filter={this.state.filter}
+            handleClick={this.deletePerson}
+          />
+        </section>
       </div>
     )
   }

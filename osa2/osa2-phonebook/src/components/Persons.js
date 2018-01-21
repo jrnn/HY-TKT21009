@@ -13,7 +13,8 @@ const Persons = ({ persons, filter, handleClick }) => {
               <td>{p.number}</td>
               <td>
                 <input
-                  type="button"
+                  className="button"
+                  type="submit"
                   value="Poista"
                   onClick={handleClick(p.id)}
                 />

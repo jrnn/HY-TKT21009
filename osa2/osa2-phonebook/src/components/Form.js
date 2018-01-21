@@ -12,7 +12,7 @@ const Form = ({ onSubmit, inputs }) => {
           {renderInputs()}
           <tr>
             <td>
-              <input type="submit" value="Lisää" />
+              <input className="button" type="submit" value="Lisää" />
             </td>
           </tr>
         </tbody>

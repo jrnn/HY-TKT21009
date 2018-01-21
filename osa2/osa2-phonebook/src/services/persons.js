@@ -3,10 +3,7 @@ import Axios from 'axios'
 const url = "http://localhost:3001/persons"
 
 const validate = (name, number, persons) => {
-  if (name === "" || number === "") {
-    alert("Ei tyhjiä syötteitä!")
-    return null
-  }
+  if (name === "" || number === "") { return null }
 
   persons = persons
     .filter(p => (p.name.toLowerCase() === name.toLowerCase()))
