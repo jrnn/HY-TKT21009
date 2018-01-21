@@ -26,9 +26,7 @@ class App extends React.Component {
   addPerson = (e) => {
     e.preventDefault()
 
-    setTimeout(() => {
-      this.setState({ alert : null })
-    }, 5000)
+    setTimeout(() => { this.setState({ alert : null })}, 5000)
 
     let person = personService.validate(
       this.state.newName,
@@ -37,10 +35,7 @@ class App extends React.Component {
     )
 
     if (person == null) {
-      this.setState({
-        alert : { msg : "Ei tyhjiä syötteitä!", type : "fail" }
-      })
-
+      this.setState({ alert : { msg : "Ei tyhjiä syötteitä!", type : "fail" }})
       return
     }
 
@@ -57,15 +52,23 @@ class App extends React.Component {
         .update(person.id, person)
         .then(changedPerson => this.setState({
           persons : this.state.persons.map(p =>
-            (p.id !== person.id ? p : changedPerson)),
-            alert : { msg : "Henkilön tiedot päivitetty", type : "success" }
+            (p.id !== person.id ? p : changedPerson))
         }))
+        .catch(ex => {
+          this.setState({ persons : this.state.persons.filter(p => (p.id !== person.id))})
+          person.id = null
+
+          personService
+            .add(person)
+            .then(newPerson => this.setState({
+              persons : this.state.persons.concat(newPerson)              
+            }))
+        })
+
+        this.setState({ alert : { msg : "Henkilön tiedot päivitetty", type : "success" }})
     }
 
-    this.setState({
-      newName : "",
-      newNumber : ""
-    })
+    this.setState({ newName : "", newNumber : "" })
   }
 
   deletePerson = (id) => {
@@ -75,12 +78,14 @@ class App extends React.Component {
       personService
         .remove(id)
         .then(res => this.setState({
-            persons : this.state.persons.filter(p => (p.id !== id)),
-            alert : { msg : "Henkilö poistettu puhelinluettelosta", type : "success" }
+          persons : this.state.persons.filter(p => (p.id !== id))
         }))
-        setTimeout(() => {
-          this.setState({ alert : null })
-        }, 5000)
+        .catch(ex => this.setState({
+          persons : this.state.persons.filter(p => (p.id !== id))
+        }))
+
+      this.setState({ alert : { msg : "Henkilö poistettu puhelinluettelosta", type : "success" }})
+      setTimeout(() => { this.setState({ alert : null })}, 5000)
     }
   }
 
