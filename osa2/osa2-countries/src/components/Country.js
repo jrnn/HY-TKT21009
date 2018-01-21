@@ -1,15 +1,11 @@
 import React from 'react'
 
-class Country extends React.Component {
-  constructor(props) {
-    super(props)
-  }
-
-  render() {
-    return (
-      <div></div>
-    )
-  }
+const Country = ({ country, onClick }) => {
+  return (
+    <li onClick={() => onClick(country.name)}>
+      {country.name}
+    </li>
+  )
 }
 
 export default Country

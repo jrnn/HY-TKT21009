@@ -18,6 +18,10 @@ class App extends React.Component {
       .then(res => this.setState({ countries : res.data }))
   }
 
+  handleCountryClick = (country) => {
+    this.setState({ lookup : country })
+  }
+
   handleSearchChange = (e) => {
     this.setState({ lookup : e.target.value })
   }
@@ -30,11 +34,13 @@ class App extends React.Component {
           value={this.state.lookup}
           onChange={this.handleSearchChange}
         />
-        <Countries countries={
-          this.state.countries
-            .filter(c => c.name.toLowerCase()
-              .includes(this.state.lookup.toLowerCase()))
+        <Countries
+          countries={
+            this.state.countries
+              .filter(c => c.name.toLowerCase()
+                .includes(this.state.lookup.toLowerCase()))
           }
+          onClick={this.handleCountryClick}
         />
       </div>
     )
