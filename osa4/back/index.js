@@ -5,40 +5,16 @@ const cors = require("cors")
 const mongoose = require ("mongoose")
 require("dotenv").config()
 
-const Blog = mongoose.model("Blog", {
-  title : String,
-  author : String,
-  url : String,
-  likes : Number
-})
-
-module.exports = Blog
+const blogRouter = require("./controller/blog")
+const Blog = require("./model/blog")
 
 app.use(cors())
 app.use(bodyParser.json())
+// app.use(express.static("build")) <-- perhaps needed at some point
+app.use("/api/blogs", blogRouter)
 
-const mongoUrl = process.env.MONGODB_URI
-console.log(process.env.MONGODB_URI)
-mongoose.connect(mongoUrl)
+mongoose.connect(process.env.MONGODB_URI)
 mongoose.Promise = global.Promise
-
-app.get("/api/blogs", (req, res) => {
-  Blog
-    .find({})
-    .then(result => {
-      res.json(result)
-    })
-})
-
-app.post("/api/blogs", (req, res) => {
-  let blog = new Blog(req.body)
-
-  blog
-    .save()
-    .then(result => {
-      res.status(201).json(result)
-    })
-})
 
 const PORT = 3003
 app.listen(PORT, () => console.log(`Now listening on port ${PORT}`))
