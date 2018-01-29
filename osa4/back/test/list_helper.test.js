@@ -70,3 +70,37 @@ describe("favoriteBlog", () => {
   })
 
 })
+
+describe("mostLikes", () => {
+
+  test("of empty list is null : 0", () => {
+    let result = listHelper.mostBlogs([])
+    expect(result).toEqual(
+      {
+        author : null,
+        blogs : 0
+      }
+    )
+  })
+
+  test("of list of one is <author> : 1", () => {
+    let result = listHelper.mostBlogs([blogs[1]])
+    expect(result).toEqual(
+      {
+        author : "Spengebeb Squrupunts",
+        blogs : 1
+      }
+    )
+  })
+
+  test("returns correct author from list of many", () => {
+    let result = listHelper.mostBlogs(blogs)
+    expect(result).toEqual(
+      {
+        author : "dougie coop",
+        blogs : 2
+      }
+    )
+  })
+
+})

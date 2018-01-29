@@ -22,6 +22,34 @@ const favoriteBlog = (blogs) => {
   return bestBlog
 }
 
+const mostBlogs = (blogs) => {
+  let stats = new Map()
+
+  for (let i = 0; i < blogs.length; i++) {
+    let author = blogs[i].author
+
+    if (!stats.has(author)) stats.set(author, 0)
+
+    let prev = stats.get(author)
+    stats.set(author, prev + 1)
+  }
+
+  let bestAuthor = null
+  let totalBlogs = 0
+
+  stats.forEach((i, author) => {
+    if (i > totalBlogs) {
+      bestAuthor = author
+      totalBlogs = i
+    }
+  })
+
+  return {
+    author : bestAuthor,
+    blogs : totalBlogs
+  }
+}
+
 module.exports = {
-  dummy, totalLikes, favoriteBlog
+  dummy, totalLikes, favoriteBlog, mostBlogs
 }
