@@ -1,3 +1,17 @@
+const keyWithHighestValue = (stats) => {
+  let bestKey = null
+  let bestValue = 0
+
+  stats.forEach((value, key) => {
+    if (value > bestValue) {
+      bestKey = key
+      bestValue = value
+    }
+  })
+
+  return bestKey
+}
+
 const dummy = (blogs) => {
   return 1
 }
@@ -34,22 +48,34 @@ const mostBlogs = (blogs) => {
     stats.set(author, prev + 1)
   }
 
-  let bestAuthor = null
-  let totalBlogs = 0
-
-  stats.forEach((i, author) => {
-    if (i > totalBlogs) {
-      bestAuthor = author
-      totalBlogs = i
-    }
-  })
+  let bestAuthor = keyWithHighestValue(stats)
 
   return {
     author : bestAuthor,
-    blogs : totalBlogs
+    blogs : (bestAuthor ? stats.get(bestAuthor) : 0)
+  }
+}
+
+const mostLikes = (blogs) => {
+  let stats = new Map()
+
+  for (let i = 0; i < blogs.length; i++) {
+    let author = blogs[i].author
+
+    if (!stats.has(author)) stats.set(author, 0)
+
+    let prev = stats.get(author)
+    stats.set(author, prev + blogs[i].likes)
+  }
+
+  let bestAuthor = keyWithHighestValue(stats)
+
+  return {
+    author : bestAuthor,
+    likes : (bestAuthor ? stats.get(bestAuthor) : 0)
   }
 }
 
 module.exports = {
-  dummy, totalLikes, favoriteBlog, mostBlogs
+  dummy, totalLikes, favoriteBlog, mostBlogs, mostLikes
 }

@@ -5,22 +5,25 @@ let blogs = [
     id : "5a6e4f4396835953594a35a2",
     title: "this is the water, and this is the well",
     author: "dougie coop",
-    url: "http://localhost:3003/api/blogs",
     likes: 13
   },
   {
     id: "5a6e57ea9fb74e62b9ccea28",
     title: "Krabby patty appreciators",
     author: "Spengebeb Squrupunts",
-    url: "http://localhost:3003/api/blogs",
     likes: 42
   },
   {
-  id: "5a6e665ea930976ccd9649e5",
-  title: "Infinite Twin Peaks theories and speculation",
-  author: "dougie coop",
-  url: "http://localhost:3003/api/blogs",
-  likes: 31
+    id: "5a6e665ea930976ccd9649e5",
+    title: "Infinite Twin Peaks theories and speculation",
+    author: "dougie coop",
+    likes: 31
+  },
+  {
+    id: "5a6f088d9578aa0fcf60ba12",
+    title: "Quadrupleroundhousekicking people in the face so hard they turn into doors",
+    author: "Jackiechuck Channorris",
+    likes: 43
   }
 ]
 
@@ -47,7 +50,7 @@ describe("totalLikes", () => {
 
   test("of many is calculated right", () => {
     let result = listHelper.totalLikes(blogs)
-    expect(result).toBe(86)
+    expect(result).toBe(129)
   })
 
 })
@@ -66,12 +69,12 @@ describe("favoriteBlog", () => {
 
   test("returns correct blog from list of many", () => {
     let result = listHelper.favoriteBlog(blogs)
-    expect(result).toEqual(blogs[1])
+    expect(result).toEqual(blogs[3])
   })
 
 })
 
-describe("mostLikes", () => {
+describe("mostBlogs", () => {
 
   test("of empty list is null : 0", () => {
     let result = listHelper.mostBlogs([])
@@ -99,6 +102,40 @@ describe("mostLikes", () => {
       {
         author : "dougie coop",
         blogs : 2
+      }
+    )
+  })
+
+})
+
+describe("mostLikes", () => {
+
+  test("of empty list is null : 0", () => {
+    let result = listHelper.mostLikes([])
+    expect(result).toEqual(
+      {
+        author : null,
+        likes : 0
+      }
+    )
+  })
+
+  test("of list of one is <author> : <likes>", () => {
+    let result = listHelper.mostLikes([blogs[1]])
+    expect(result).toEqual(
+      {
+        author : "Spengebeb Squrupunts",
+        likes : 42
+      }
+    )
+  })
+
+  test("returns correct author from list of many", () => {
+    let result = listHelper.mostLikes(blogs)
+    expect(result).toEqual(
+      {
+        author : "dougie coop",
+        likes : 44
       }
     )
   })
