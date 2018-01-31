@@ -4,26 +4,27 @@ const api = supertest(app)
 const Blog = require("../model/blog")
 const listHelper = require("../util/list_helper")
 
+let path = "/api/blogs"
 let blogs = [
   {
-    title: "this is the water, and this is the well",
-    author: "dougie coop",
-    likes: 13
+    title : "this is the water, and this is the well",
+    author : "dougie coop",
+    likes : 13
   },
   {
-    title: "Krabby patty appreciators",
-    author: "Spengebeb Squrupunts",
-    likes: 42
+    title : "Krabby patty appreciators",
+    author : "Spengebeb Squrupunts",
+    likes : 42
   },
   {
-    title: "Infinite Twin Peaks theories and speculation",
-    author: "dougie coop",
-    likes: 31
+    title : "Infinite Twin Peaks theories and speculation",
+    author : "dougie coop",
+    likes : 31
   },
   {
-    title: "Quadrupleroundhousekicking people in the face so hard they turn into doors",
-    author: "Jackiechuck Channorris",
-    likes: 43
+    title : "Quadrupleroundhousekicking people in the face so hard they turn into doors",
+    author : "Jackiechuck Channorris",
+    likes : 43
   }
 ]
 
@@ -37,8 +38,6 @@ beforeAll(async () => {
 })
 
 describe("blog api GET requests", () => {
-
-  let path = "/api/blogs"
 
   test("blogs are returned as json", async () => {
     await api
@@ -62,6 +61,31 @@ describe("blog api GET requests", () => {
     expect(titles).toContain("Krabby patty appreciators")
     expect(authors).toContain("Jackiechuck Channorris")
     expect(likes).toBe(listHelper.totalLikes(blogs))
+  })
+
+})
+
+describe("blog api POST requests", () => {
+
+  test("valid blog can be posted", async () => {
+    let newBlog = {
+      title : "tr00news : resolutely reject fake news",
+      author : "Beardy McBeardface",
+      url : "https://tr00news.herokuapp.com/",
+      likes : 1337
+    }
+
+    await api
+      .post(path)
+      .send(newBlog)
+      .expect(201)
+      .expect("Content-Type", "application/json; charset=utf-8")
+
+    let res = await api.get(path)
+    let authors = res.body.map(b => b.author)
+
+    expect(res.body.length).toBe(blogs.length + 1)
+    expect(authors).toContain("Beardy McBeardface")
   })
 
 })

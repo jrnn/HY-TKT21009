@@ -22,6 +22,7 @@ server.listen(config.port, () => {
 })
 
 server.on("close", () => {
+  console.log(`Now closing server and connection to db`)
   mongoose.connection.close()
 })
 

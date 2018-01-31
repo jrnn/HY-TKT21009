@@ -11,16 +11,14 @@ blogRouter.get("/", async (req, res) => {
   }
 })
 
-blogRouter.post("/", (req, res) => {
-  let blog = new Blog(req.body)
-
-  blog
-    .save()
-    .then(result => res.status(201).json(result))
-    .catch(error => {
-      console.log(error)
-      res.status(400).send({ error : "oops! something went kaputt" })
-    })
+blogRouter.post("/", async (req, res) => {
+  try {
+    let newBlog = await new Blog(req.body).save()
+    res.status(201).json(Blog.format(newBlog))
+  } catch (ex) {
+    console.log(error)
+    res.status(400).send({ error : "oops! something went kaputt" })
+  }
 })
 
 module.exports = blogRouter
