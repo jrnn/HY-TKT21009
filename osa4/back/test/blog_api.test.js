@@ -107,6 +107,40 @@ describe("blog api POST requests", () => {
     expect(blog[0].likes).toBe(0)
   })
 
+  test("refuse blog if 'title' missing", async () => {
+    let newBlog = {
+      author : "Evo-Peelo McPeelonen",
+      url : "https://tr00news.herokuapp.com/"
+    }
+
+    let initial = await api.get(path)
+
+    await api
+      .post(path)
+      .send(newBlog)
+      .expect(400)
+
+    let res = await api.get(path)
+    expect(res.body.length).toBe(initial.body.length)
+  })
+
+  test("refuse blog if 'url' missing", async () => {
+    let newBlog = {
+      title : "how NOT to post blogs",
+      author : "Evo-Peelo McPeelonen"
+    }
+
+    let initial = await api.get(path)
+
+    await api
+      .post(path)
+      .send(newBlog)
+      .expect(400)
+
+    let res = await api.get(path)
+    expect(res.body.length).toBe(initial.body.length)
+  })
+
 })
 
 afterAll(() => {

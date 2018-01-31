@@ -14,11 +14,15 @@ blogRouter.get("/", async (req, res) => {
 blogRouter.post("/", async (req, res) => {
   try {
     let newBlog = new Blog(req.body)
+
+    if (!newBlog.title) throw "title missing"
+    if (!newBlog.url) throw "url missing"
+
     newBlog = await newBlog.save()
     res.status(201).json(Blog.format(newBlog))
   } catch (ex) {
-    console.log(error)
-    res.status(400).send({ error : "oops! something went kaputt" })
+    console.log(ex)
+    res.status(400).send({ error : ex })
   }
 })
 
