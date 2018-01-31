@@ -13,7 +13,8 @@ blogRouter.get("/", async (req, res) => {
 
 blogRouter.post("/", async (req, res) => {
   try {
-    let newBlog = await new Blog(req.body).save()
+    let newBlog = new Blog(req.body)
+    newBlog = await newBlog.save()
     res.status(201).json(Blog.format(newBlog))
   } catch (ex) {
     console.log(error)

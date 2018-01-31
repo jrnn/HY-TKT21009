@@ -88,6 +88,25 @@ describe("blog api POST requests", () => {
     expect(authors).toContain("Beardy McBeardface")
   })
 
+  test("if 'likes' missing, defaults to 0", async () => {
+    let newBlog = {
+      title : "this blog passes through even though no one likes it",
+      author : "Forever McAlone",
+      url : "https://tr00news.herokuapp.com/"
+    }
+
+    await api
+      .post(path)
+      .send(newBlog)
+      .expect(201)
+      .expect("Content-Type", "application/json; charset=utf-8")
+
+    let res = await api.get(path)
+    let blog = res.body.filter(b => b.author === "Forever McAlone")
+
+    expect(blog[0].likes).toBe(0)
+  })
+
 })
 
 afterAll(() => {
