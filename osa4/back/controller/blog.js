@@ -16,6 +16,7 @@ blogRouter.post("/", async (req, res) => {
     let newBlog = new Blog(req.body)
 
     if (!newBlog.title) throw "title missing"
+    if (!newBlog.author) throw "author missing"
     if (!newBlog.url) throw "url missing"
 
     newBlog = await newBlog.save()
