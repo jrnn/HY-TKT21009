@@ -4,7 +4,9 @@ const api = supertest(app)
 const Blog = require("../model/blog")
 const listHelper = require("../util/list_helper")
 const testHelper = require("./test_helper")
+
 const path = "/api/blogs"
+const nonexistingId = new Blog()._id
 
 describe("given that there are blogs in database", async() => {
 
@@ -40,26 +42,58 @@ describe("given that there are blogs in database", async() => {
   describe(`GET ${path}/:id`, async () => {
 
     test("with valid id returns individual blog as json", async () => {
-      expect(1).toBe(1)
+      let blogsInDb = await testHelper.findAll()
+      let i = Math.floor(Math.random() * blogsInDb.length)
+      let blog = blogsInDb[i]
+
+      let res = await api
+        .get(path + `/${blog.id}`)
+        .expect(200)
+        .expect("Content-Type", "application/json; charset=utf-8")
+
+      expect(res.body.title).toBe(blog.title)
+      expect(res.body.author).toBe(blog.author)
+      expect(res.body.likes).toBe(blog.likes)
     })
 
     test("with nonexisting id returns 404", async () => {
-      expect(1).toBe(1)
+      await api
+        .get(path + `/${nonexistingId}`)
+        .expect(404)
     })
 
     test("with invalid id returns 400", async () => {
-      expect(1).toBe(1)
+      await api
+        .get(path + "/nuuskamuikkunen")
+        .expect(400)
     })
   })
 
   describe(`DELETE ${path}/:id`, async () => {
+    let newBlog
 
-    test("with valid id deletes ONLY the blog in question", async () => {
-      expect(1).toBe(1)
+    beforeAll(async () => {
+      newBlog = new Blog({
+        title : "Creative ways to commit suicide",
+        author : "Spengebeb Squrupunts",
+        url : "http://www.yle.fi/"
+      })
+
+      await newBlog.save()
     })
 
-    test("with invalid id nonetheless returns 204", async () => {
-      expect(1).toBe(1)
+    test("with valid id deletes ONLY the blog in question", async () => {
+      let blogsBefore = await testHelper.findAll()
+
+      await api
+        .delete(path + `/${newBlog._id}`)
+        .expect(204)
+
+      let blogsAfter = await testHelper.findAll()
+      let titles = blogsAfter.map(b => b.title)
+
+      expect(titles).not.toContain(newBlog.title)
+      expect(blogsAfter.length).toBe(blogsBefore.length - 1)
     })
   })
 })
@@ -88,8 +122,11 @@ describe("regardless of what is in database", async () => {
     })
 
     test("succeeds even if 'likes' missing (defaults to 0)", async () => {
-      let newBlog = testHelper.getRandom()
-      delete newBlog.likes
+      let newBlog = {
+        title : "this shall pass even though no one likes it",
+        author : "Gandalf McGandalfface",
+        url : "abc"
+      }
 
       await api
         .post(path)

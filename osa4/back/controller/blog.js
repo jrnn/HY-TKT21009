@@ -11,6 +11,18 @@ blogRouter.get("/", async (req, res) => {
   }
 })
 
+blogRouter.get("/:id", async (req, res) => {
+  try {
+    let blog = await Blog.findById(req.params.id)
+
+    if (blog) res.json(Blog.format(blog))
+    else res.status(404).end()
+  } catch (ex) {
+    console.log(ex)
+    res.status(400).send({ error : "invalid id" })
+  }
+})
+
 blogRouter.post("/", async (req, res) => {
   try {
     let newBlog = new Blog(req.body)
@@ -24,6 +36,16 @@ blogRouter.post("/", async (req, res) => {
   } catch (ex) {
     console.log(ex)
     res.status(400).send({ error : ex })
+  }
+})
+
+blogRouter.delete("/:id", async (req, res) => {
+  try {
+    await Blog.findByIdAndRemove(req.params.id)
+    res.status(204).end()
+  } catch (ex) {
+    console.log(ex)
+    res.status(400).send({ error : "invalid id" })
   }
 })
 
