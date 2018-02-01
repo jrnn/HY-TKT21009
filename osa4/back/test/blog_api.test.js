@@ -69,6 +69,26 @@ describe("given that there are blogs in database", async() => {
     })
   })
 
+  describe(`PUT ${path}/:id`, async () => {
+
+    test("with valid id updates ONLY likes for blog in question", async () => {
+      let blogsBefore = await testHelper.findAll()
+      let i = Math.floor(Math.random() * blogsBefore.length)
+      let blog = blogsBefore[i]
+      blog.likes += 1337
+
+      await api
+        .put(path + `/${blog.id}`)
+        .send(blog)
+        .expect(200)
+        .expect("Content-Type", "application/json; charset=utf-8")
+
+      let blogsAfter = await testHelper.findAll()
+      expect(listHelper.totalLikes(blogsAfter))
+        .toBe(listHelper.totalLikes(blogsBefore))
+    })
+  })
+
   describe(`DELETE ${path}/:id`, async () => {
     let newBlog
 

@@ -39,6 +39,23 @@ blogRouter.post("/", async (req, res) => {
   }
 })
 
+blogRouter.put("/:id", async (req, res) => {
+  try {
+    if (isNaN(req.body.likes) || req.body.likes < 0) {
+      throw "invalid value for 'likes'"
+    }
+
+    let blog = await Blog.findById(req.params.id)
+    blog.likes = req.body.likes
+
+    blog = await Blog.findByIdAndUpdate(req.params.id, blog, { new : true })
+    res.json(Blog.format(blog))
+  } catch (ex) {
+    console.log(ex)
+    res.status(400).send({ error : ex })
+  }
+})
+
 blogRouter.delete("/:id", async (req, res) => {
   try {
     await Blog.findByIdAndRemove(req.params.id)
