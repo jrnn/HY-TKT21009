@@ -1,4 +1,5 @@
 const Blog = require("../model/blog")
+const User = require("../model/user")
 
 const initialBlogs = [
   {
@@ -87,16 +88,104 @@ const invalidBlogs = [
   }
 ]
 
-const findAll = async () => {
+const initialUsers = [
+  {
+    "username" : "hmchemul",
+    "password" : "qwerty123",
+    "name" : "Hemuli McHemuliface",
+    "adult" : true
+  },
+  {
+    "username" : "hmcheman",
+    "password" : "qwerty123",
+    "name" : "Heman McHemanface",
+    "adult" : true
+  }
+]
+
+const newUsers = [
+  {
+    "username" : "bmcbeard",
+    "password" : "qwerty123",
+    "name" : "Beardy McBeardface",
+    "adult" : true
+  },
+  {
+    "username" : "bmcspong",
+    "password" : "qwerty123",
+    "name" : "Bobby McSpongebobface",
+    "adult" : false
+  },
+  {
+    "username" : "gmcganda",
+    "password" : "qwerty123",
+    "name" : "Gandalf McGandalfface",
+    "adult" : true
+  }
+]
+
+const invalidUsers = [
+  {
+    "username" : "im",
+    "name" : "In",
+    "adult" : true
+  },
+  {
+    "username" : "imcinval",
+    "password" : "qw",
+    "adult" : true
+  },
+  {
+    "username" : "im",
+    "password" : "qwerty123",
+    "name" : "In",
+    "adult" : true
+  },
+  {
+    "password" : "qw",
+    "name" : "Invalid McInvalidface",
+    "adult" : true
+  },
+  {
+    "username" : "imcinval",
+    "password" : "qwerty123",
+    "name" : "In",
+    "adult" : true
+  },
+  {
+    "username" : "imcinval",
+    "password" : "qw",
+    "name" : "Invalid McInvalidface",
+    "adult" : true
+  },
+  {
+    "password" : "qwerty123",
+    "name" : "Invalid McInvalidface",
+    "adult" : true
+  }
+]
+
+const findAllBlogs = async () => {
   let blogs = await Blog.find({})
   return blogs.map(Blog.format)
 }
 
-const getRandom = () => {
+const getRandomBlog = () => {
   let i = Math.floor(Math.random() * newBlogs.length)
   return newBlogs[i]
 }
 
+const findAllUsers = async () => {
+  let users = await User.find({})
+  return users.map(User.format)
+}
+
+const getRandomUser = () => {
+  let i = Math.floor(Math.random() * newUsers.length)
+  return newUsers[i]
+}
+
 module.exports = {
-  initialBlogs, invalidBlogs, findAll, getRandom
+  initialBlogs, invalidBlogs, findAllBlogs, getRandomBlog,
+  initialUsers, invalidUsers, findAllUsers, getRandomUser
 }

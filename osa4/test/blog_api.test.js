@@ -19,7 +19,7 @@ describe("given that there are blogs in database", async() => {
   describe(`GET ${path}`, async() => {
 
     test("returns those blogs as json", async () => {
-      let blogsInDb = await testHelper.findAll()
+      let blogsInDb = await testHelper.findAllBlogs()
 
       let res = await api
         .get(path)
@@ -42,7 +42,7 @@ describe("given that there are blogs in database", async() => {
   describe(`GET ${path}/:id`, async () => {
 
     test("with valid id returns individual blog as json", async () => {
-      let blogsInDb = await testHelper.findAll()
+      let blogsInDb = await testHelper.findAllBlogs()
       let i = Math.floor(Math.random() * blogsInDb.length)
       let blog = blogsInDb[i]
 
@@ -72,7 +72,7 @@ describe("given that there are blogs in database", async() => {
   describe(`PUT ${path}/:id`, async () => {
 
     test("with valid id updates ONLY likes for blog in question", async () => {
-      let blogsBefore = await testHelper.findAll()
+      let blogsBefore = await testHelper.findAllBlogs()
       let i = Math.floor(Math.random() * blogsBefore.length)
       let blog = blogsBefore[i]
       blog.likes += 1337
@@ -83,7 +83,7 @@ describe("given that there are blogs in database", async() => {
         .expect(200)
         .expect("Content-Type", "application/json; charset=utf-8")
 
-      let blogsAfter = await testHelper.findAll()
+      let blogsAfter = await testHelper.findAllBlogs()
       expect(listHelper.totalLikes(blogsAfter))
         .toBe(listHelper.totalLikes(blogsBefore))
     })
@@ -103,13 +103,13 @@ describe("given that there are blogs in database", async() => {
     })
 
     test("with valid id deletes ONLY the blog in question", async () => {
-      let blogsBefore = await testHelper.findAll()
+      let blogsBefore = await testHelper.findAllBlogs()
 
       await api
         .delete(path + `/${newBlog._id}`)
         .expect(204)
 
-      let blogsAfter = await testHelper.findAll()
+      let blogsAfter = await testHelper.findAllBlogs()
       let titles = blogsAfter.map(b => b.title)
 
       expect(titles).not.toContain(newBlog.title)
@@ -123,8 +123,8 @@ describe("regardless of what is in database", async () => {
   describe(`POST ${path}`, async () => {
 
     test("succeeds with valid input, returning newly added blog as json", async () => {
-      let blogsBefore = await testHelper.findAll()
-      let newBlog = testHelper.getRandom()
+      let blogsBefore = await testHelper.findAllBlogs()
+      let newBlog = testHelper.getRandomBlog()
 
       await api
         .post(path)
@@ -132,7 +132,7 @@ describe("regardless of what is in database", async () => {
         .expect(201)
         .expect("Content-Type", "application/json; charset=utf-8")
 
-      let blogsAfter = await testHelper.findAll()
+      let blogsAfter = await testHelper.findAllBlogs()
       let titles = blogsAfter.map(b => b.title)
       let authors = blogsAfter.map(b => b.author)
 
@@ -154,7 +154,7 @@ describe("regardless of what is in database", async () => {
         .expect(201)
         .expect("Content-Type", "application/json; charset=utf-8")
 
-      let blogsInDb = await testHelper.findAll()
+      let blogsInDb = await testHelper.findAllBlogs()
       let blog = blogsInDb.filter(b => b.author === newBlog.author)[0]
 
       expect(blog.title).toEqual(newBlog.title)
@@ -162,7 +162,7 @@ describe("regardless of what is in database", async () => {
     })
 
     test("fails if 'title', 'author' or 'url' missing, returning 400", async () => {
-      let blogsBefore = await testHelper.findAll()
+      let blogsBefore = await testHelper.findAllBlogs()
 
       testHelper.invalidBlogs
         .forEach(async (b) => {
@@ -172,7 +172,7 @@ describe("regardless of what is in database", async () => {
             .expect(400)
       })
 
-      let blogsAfter = await testHelper.findAll()
+      let blogsAfter = await testHelper.findAllBlogs()
       expect(blogsAfter.length).toBe(blogsBefore.length)
     })
   })
