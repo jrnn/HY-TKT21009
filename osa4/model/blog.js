@@ -7,7 +7,7 @@ const schema = new mongoose.Schema({
   likes : { type : Number, default : 0 }
 })
 
-schema.statics.format = function(blog) {
+schema.statics.format = (blog) => {
   return {
     id : blog._id,
     title : blog.title,
