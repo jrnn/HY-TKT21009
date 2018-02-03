@@ -3,14 +3,6 @@ const blogRouter = require("express").Router()
 const Blog = require("../model/blog")
 const User = require("../model/user")
 
-const extractToken = (req) => {
-  let auth = req.get("authorization")
-
-  return (auth && auth.toLowerCase().startsWith("bearer "))
-    ? auth.substring(7)
-    : null
-}
-
 blogRouter.get("/", async (req, res) => {
   try {
     let blogs = await Blog
@@ -40,14 +32,8 @@ blogRouter.get("/:id", async (req, res) => {
 
 blogRouter.post("/", async (req, res) => {
   try {
-    let token = extractToken(req)
-
-    if (!token) return res
-      .status(401)
-      .json({ error : "missing token" })
-
-    token = jwt
-      .verify(token, process.env.SALAISUUS)
+    let token = jwt
+      .verify(req.token, process.env.SALAISUUS)
 
     if (!(token.id && token.username)) throw "invalid token"
     if (!req.body.title) throw "title missing"
@@ -55,9 +41,8 @@ blogRouter.post("/", async (req, res) => {
     if (!req.body.url) throw "url missing"
 
     let user = await User.findById(token.id)
-    if (!user) throw "what the hell...?! user not found?!"
-
     let newBlog = new Blog(req.body)
+
     newBlog.user = user._id
     newBlog = await newBlog.save()
 

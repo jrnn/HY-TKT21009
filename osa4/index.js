@@ -5,6 +5,7 @@ const bodyParser = require("body-parser")
 const cors = require("cors")
 const http = require("http")
 const mongoose = require ("mongoose")
+const middleware = require("./util/middleware")
 const config = require("./util/config")
 const blogRouter = require("./controller/blog")
 const loginRouter = require("./controller/login")
@@ -16,7 +17,9 @@ mongoose.Promise = global.Promise
 
 app.use(cors())
 app.use(bodyParser.json())
+app.use(middleware.tokenGitter)
 // app.use(express.static("build")) <-- perhaps needed at some point
+
 app.use("/api/blogs", blogRouter)
 app.use("/api/login", loginRouter)
 app.use("/api/users", userRouter)
