@@ -7,6 +7,7 @@ const http = require("http")
 const mongoose = require ("mongoose")
 const config = require("./util/config")
 const blogRouter = require("./controller/blog")
+const loginRouter = require("./controller/login")
 const userRouter = require("./controller/user")
 const server = http.createServer(app)
 
@@ -17,6 +18,7 @@ app.use(cors())
 app.use(bodyParser.json())
 // app.use(express.static("build")) <-- perhaps needed at some point
 app.use("/api/blogs", blogRouter)
+app.use("/api/login", loginRouter)
 app.use("/api/users", userRouter)
 
 server.listen(config.port, () => {
