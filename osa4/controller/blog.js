@@ -1,11 +1,14 @@
+const jwt = require("jsonwebtoken")
 const blogRouter = require("express").Router()
 const Blog = require("../model/blog")
 const User = require("../model/user")
 
-getRandomUser = async () => {
-  let users = await User.find({})
-  let i = Math.floor(Math.random() * users.length)
-  return users[i]
+const extractToken = (req) => {
+  let auth = req.get("authorization")
+
+  return (auth && auth.toLowerCase().startsWith("bearer "))
+    ? auth.substring(7)
+    : null
 }
 
 blogRouter.get("/", async (req, res) => {
@@ -37,16 +40,22 @@ blogRouter.get("/:id", async (req, res) => {
 
 blogRouter.post("/", async (req, res) => {
   try {
+    let token = extractToken(req)
+
+    if (!token) return res
+      .status(401)
+      .json({ error : "missing token" })
+
+    token = jwt
+      .verify(token, process.env.SALAISUUS)
+
+    if (!(token.id && token.username)) throw "invalid token"
     if (!req.body.title) throw "title missing"
     if (!req.body.author) throw "author missing"
     if (!req.body.url) throw "url missing"
-    /*if (!req.body.userId) throw "userId missing"
 
-    let user = await User.findById(req.body.userId)
-    if (!user) throw "invalid userId"*/
-
-    // temporary measure : assign user randomly
-    let user = await getRandomUser()
+    let user = await User.findById(token.id)
+    if (!user) throw "what the hell...?! user not found?!"
 
     let newBlog = new Blog(req.body)
     newBlog.user = user._id
@@ -57,8 +66,11 @@ blogRouter.post("/", async (req, res) => {
 
     res.status(201).json(Blog.format(newBlog))
   } catch (ex) {
+    if (ex.name === "JsonWebTokenError")
+      return res.status(401).json({ error : "invalid token" })
+
     console.log(ex)
-    res.status(400).send({ error : ex })
+    res.status(500).send({ error : ex })
   }
 })
 
