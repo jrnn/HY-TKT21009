@@ -55,7 +55,7 @@ blogRouter.post("/", async (req, res) => {
       return res.status(401).json({ error : "invalid token" })
 
     console.log(ex)
-    res.status(500).send({ error : ex })
+    res.status(400).send({ error : ex })
   }
 })
 
@@ -77,11 +77,17 @@ blogRouter.put("/:id", async (req, res) => {
 
 blogRouter.delete("/:id", async (req, res) => {
   try {
+    let token = jwt
+      .verify(req.token, process.env.SALAISUUS)
+
+    if (!(token.id && token.username)) throw "invalid token"
+
     let blog = await Blog.findById(req.params.id)
     if (!blog) throw "invalid id"
 
-    let user = await User.findById(blog.user)
-    if (!user) throw "related user not found"
+    let user = await User.findById(token.id)
+    if (blog.user.toString() !== user._id.toString())
+      return res.status(401).send({ error : "could not verify blog ownership" })
 
     await blog.remove()
 
@@ -91,6 +97,9 @@ blogRouter.delete("/:id", async (req, res) => {
 
     res.status(204).end()
   } catch (ex) {
+    if (ex.name === "JsonWebTokenError")
+      return res.status(401).json({ error : "invalid token" })
+
     console.log(ex)
     res.status(400).send({ error : ex })
   }
