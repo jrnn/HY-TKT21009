@@ -10,7 +10,10 @@ const usernameExists = async (username) => {
 
 userRouter.get("/", async (req, res) => {
   try {
-    let users = await User.find({})
+    let users = await User
+      .find({})
+      .populate("blogs", { title : 1, author : 1, url : 1, likes : 1 })
+
     res.json(users.map(User.format))
   } catch (ex) {
     console.log(ex)

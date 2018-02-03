@@ -1,9 +1,19 @@
 const blogRouter = require("express").Router()
 const Blog = require("../model/blog")
+const User = require("../model/user")
+
+getRandomUser = async () => {
+  let users = await User.find({})
+  let i = Math.floor(Math.random() * users.length)
+  return users[i]
+}
 
 blogRouter.get("/", async (req, res) => {
   try {
-    let blogs = await Blog.find({})
+    let blogs = await Blog
+      .find({})
+      .populate("user", { username : 1, name : 1, adult : 1 })
+
     res.json(blogs.map(Blog.format))
   } catch (ex) {
     console.log(ex)
@@ -13,7 +23,9 @@ blogRouter.get("/", async (req, res) => {
 
 blogRouter.get("/:id", async (req, res) => {
   try {
-    let blog = await Blog.findById(req.params.id)
+    let blog = await Blog
+      .findById(req.params.id)
+      .populate("user", { username : 1, name : 1, adult : 1 })
 
     if (blog) res.json(Blog.format(blog))
     else res.status(404).end()
@@ -25,13 +37,24 @@ blogRouter.get("/:id", async (req, res) => {
 
 blogRouter.post("/", async (req, res) => {
   try {
+    if (!req.body.title) throw "title missing"
+    if (!req.body.author) throw "author missing"
+    if (!req.body.url) throw "url missing"
+    /*if (!req.body.userId) throw "userId missing"
+
+    let user = await User.findById(req.body.userId)
+    if (!user) throw "invalid userId"*/
+
+    // temporary measure : assign user randomly
+    let user = await getRandomUser()
+
     let newBlog = new Blog(req.body)
-
-    if (!newBlog.title) throw "title missing"
-    if (!newBlog.author) throw "author missing"
-    if (!newBlog.url) throw "url missing"
-
+    newBlog.user = user._id
     newBlog = await newBlog.save()
+
+    user.blogs = user.blogs.concat(newBlog._id)
+    await user.save()
+
     res.status(201).json(Blog.format(newBlog))
   } catch (ex) {
     console.log(ex)
@@ -41,9 +64,8 @@ blogRouter.post("/", async (req, res) => {
 
 blogRouter.put("/:id", async (req, res) => {
   try {
-    if (isNaN(req.body.likes) || req.body.likes < 0) {
+    if (isNaN(req.body.likes) || req.body.likes < 0)
       throw "invalid value for 'likes'"
-    }
 
     let blog = await Blog.findById(req.params.id)
     blog.likes = req.body.likes
@@ -58,11 +80,22 @@ blogRouter.put("/:id", async (req, res) => {
 
 blogRouter.delete("/:id", async (req, res) => {
   try {
-    await Blog.findByIdAndRemove(req.params.id)
+    let blog = await Blog.findById(req.params.id)
+    if (!blog) throw "invalid id"
+
+    let user = await User.findById(blog.user)
+    if (!user) throw "related user not found"
+
+    await blog.remove()
+
+    let blogs = await Blog.find({ user : user._id })
+    user.blogs = blogs.map(b => b._id)
+    await user.save()
+
     res.status(204).end()
   } catch (ex) {
     console.log(ex)
-    res.status(400).send({ error : "invalid id" })
+    res.status(400).send({ error : ex })
   }
 })
 
