@@ -1,4 +1,5 @@
 import React from "react"
+import AddBlog from "./component/add_blog"
 import Blog from "./component/blog"
 import LoginForm from "./component/login_form"
 import blogService from "./service/blog_service"
@@ -8,11 +9,14 @@ class App extends React.Component {
   constructor (props) {
     super(props)
     this.state = {
-      blogs : [],
+      blogs : [],    // siirrä ehkä kaikki blogeihin liittyvä erilliseen "Blogs" komponenttiin?
       error : null,
       user : null,
       username : "",
-      password : ""
+      password : "",
+      title : "",
+      author : "",
+      url : ""
     }
   }
 
@@ -25,7 +29,7 @@ class App extends React.Component {
     if (user) {
       user = JSON.parse(user)
       this.setState({ user })
-      // blogService.setToken(user.token)
+      blogService.setToken(user.token)
     }
   }
 
@@ -44,7 +48,7 @@ class App extends React.Component {
         })
 
       this.setState({ user })
-      // blogService.setToken(user.token)
+      blogService.setToken(user.token)
       window.localStorage.setItem("loggedBlogged", JSON.stringify(user))
 
     } catch (ex) {
@@ -63,6 +67,31 @@ class App extends React.Component {
     window.localStorage.removeItem("loggedBlogged")
   }
 
+  addBlog = async (event) => {
+    event.preventDefault()
+
+    try {
+      let blog = await blogService
+        .save({
+          title : this.state.title,
+          author : this.state.author,
+          url : this.state.url
+        })
+
+      blog = await blogService.findOne(blog._id)
+      this.setState({
+        title : "", author : "", url : "",
+        blogs : this.state.blogs.concat(blog)
+      })
+
+    } catch (ex) {
+      this.setState({ error : "check your inputs" })
+      setTimeout(() => {
+        this.setState({ error : null })
+      }, 5000)
+    }
+  }
+
   render() {
     const loginForm = () => (
       <div>
@@ -77,18 +106,30 @@ class App extends React.Component {
     )
 
     const blogList = () => (
-      <div>
-        <h2>Blogs</h2>
-        <p>
-          Logged in as {this.state.user.name}
-          <button type="submit" onClick={this.logout}>Logout</button>
-        </p>
-        <ul>
-          {this.state.blogs.map(b =>
-            <Blog key={b.id} blog={b} />
-          )}
-        </ul>
-      </div>
+      <section>
+        <div>
+          <h2>Blogs</h2>
+          <p>
+            Logged in as {this.state.user.name}
+            <button type="submit" onClick={this.logout}>Logout</button>
+          </p>
+          <ul>
+            {this.state.blogs.map(b =>
+              <Blog key={b.id} blog={b} />
+            )}
+          </ul>
+        </div>
+        <div>
+          <h2>Add new blog</h2>
+          <AddBlog
+            add={this.addBlog}
+            handler={this.handleFormChange}
+            title={this.state.title}
+            author={this.state.author}
+            url={this.state.url}
+          />
+        </div>
+      </section>
     )
 
     return (
