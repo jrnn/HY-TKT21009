@@ -20,6 +20,13 @@ class App extends React.Component {
     blogService
       .findAll()
       .then(blogs => this.setState({ blogs }))
+
+    let user = window.localStorage.getItem("loggedBlogged")
+    if (user) {
+      user = JSON.parse(user)
+      this.setState({ user })
+      // blogService.setToken(user.token)
+    }
   }
 
   handleFormChange = (event) => {
@@ -37,6 +44,8 @@ class App extends React.Component {
         })
 
       this.setState({ user })
+      // blogService.setToken(user.token)
+      window.localStorage.setItem("loggedBlogged", JSON.stringify(user))
 
     } catch (ex) {
       this.setState({ error : "invalid username or password" })
@@ -46,6 +55,12 @@ class App extends React.Component {
     }
 
     this.setState({ username : "", password : "" })
+  }
+
+  logout = (event) => {
+    event.preventDefault()
+    this.setState({ user : null })
+    window.localStorage.removeItem("loggedBlogged")
   }
 
   render() {
@@ -64,7 +79,10 @@ class App extends React.Component {
     const blogList = () => (
       <div>
         <h2>Blogs</h2>
-        <p>Logged in as {this.state.user.name}</p>
+        <p>
+          Logged in as {this.state.user.name}
+          <button type="submit" onClick={this.logout}>Logout</button>
+        </p>
         <ul>
           {this.state.blogs.map(b =>
             <Blog key={b.id} blog={b} />
