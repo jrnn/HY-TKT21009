@@ -3,18 +3,19 @@ body {
   font-family : sans-serif;
   margin : 0rem 6rem;
 }
+button {
+  background-color : black;
+  border : none;
+  color : white;
+  font-weight : bold;
+  padding : 0.25rem 0.75rem;
+}
+button:hover {
+  background-color : teal;
+  cursor : pointer;
+}
 td {
   padding : 0.25rem 1rem 0rem 0rem;
-}
-.blog-entry {
-  background-color : lightgray;
-  border : 1px solid lightgray;
-  margin : 0.25rem 0rem;
-  padding : 0.25rem 0.25rem;
-}
-.blog-entry-details {
-  font-size : 0.9em;
-  padding : 0.5rem 0rem 0rem 2rem;
 }
 .alert {
   color : white;
@@ -27,14 +28,13 @@ td {
 .alert.success {
   background-color : teal;
 }
-.button {
-  background-color : black;
-  border : none;
-  color : white;
-  font-weight : bold;
-  padding : 0.25rem 0.75rem;
+.blog-entry {
+  background-color : lightgray;
+  border : 1px solid lightgray;
+  margin : 0.25rem 0rem;
+  padding : 0.25rem 0.25rem;
 }
-.button:hover {
-  background-color : teal;
-  cursor : pointer;
+.blog-entry-details {
+  font-size : 0.9em;
+  padding : 0.5rem 0rem 0rem 2rem;
 }

@@ -25,4 +25,8 @@ const save = async (blog) => {
   return res.data
 }
 
-export default { findAll, findOne, save, setToken }
+const update = async (blog) => {
+  await axios.put(url + `/${blog.id}`, { likes : blog.likes })
+}
+
+export default { findAll, findOne, save, setToken, update }

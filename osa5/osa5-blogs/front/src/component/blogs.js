@@ -30,7 +30,6 @@ class Blogs extends React.Component {
 
   add = async (e) => {
     e.preventDefault()
-    this.addBlog.toggle()
 
     try {
       let blog = await blogService
@@ -41,6 +40,7 @@ class Blogs extends React.Component {
         })
 
       blog = await blogService.findOne(blog._id)
+      this.addBlog.toggle()
       this.setState({
         title : "", author : "", url : "",
         blogs : this.state.blogs.concat(blog),

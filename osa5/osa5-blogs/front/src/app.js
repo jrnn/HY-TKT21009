@@ -95,10 +95,8 @@ class App extends React.Component {
       <div>
         <h2>Blogs</h2>
         <p>
-          Logged in as {this.state.user.name}
-          <button type="submit" className="button" onClick={this.logout}>
-            Logout
-          </button>
+          Logged in as {this.state.user.name}&nbsp;
+          <button type="submit" onClick={this.logout}>Logout</button>
         </p>
         <Blogs />
       </div>

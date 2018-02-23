@@ -19,7 +19,7 @@ const Form = ({ handleSubmit, handleField, fields, submit }) => (
         )}
         <tr>
           <td>
-            <button type="submit" className="button">{submit}</button>
+            <button type="submit">{submit}</button>
           </td>
         </tr>
       </tbody>
