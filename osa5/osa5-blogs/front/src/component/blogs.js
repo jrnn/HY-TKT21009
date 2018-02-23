@@ -30,6 +30,7 @@ class Blogs extends React.Component {
 
   add = async (e) => {
     e.preventDefault()
+    this.addBlog.toggle()
 
     try {
       let blog = await blogService
@@ -61,16 +62,14 @@ class Blogs extends React.Component {
     return(
       <div>
         <div>
-          <ul>
-            {this.state.blogs.map(blog =>
-              <Blog key={blog.id} blog={blog} />
-            )}
-          </ul>
+          {this.state.blogs.map(blog =>
+            <Blog key={blog.id} blog={blog} />
+          )}
         </div>
         <div>
           <Alert alert={this.state.alert} />
           <h2>Add new blog</h2>
-          <Togglable button="Add new blog">
+          <Togglable button="Add new blog" ref={c => this.addBlog = c}>
             <Form
               handleSubmit={this.add}
               handleField={this.handleFormChange}

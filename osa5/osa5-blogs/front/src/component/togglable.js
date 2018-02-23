@@ -23,7 +23,7 @@ class Togglable extends React.Component {
         </div>
         <div style={show}>
           {this.props.children}
-          <button onClick={this.toggle} className="button" >
+          <button onClick={this.toggle} className="button">
             Cancel
           </button>
         </div>
