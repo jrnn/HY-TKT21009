@@ -31,7 +31,7 @@ class App extends React.Component {
     this.setState({ [e.target.name] : e.target.value })
   }
 
-  login = async (e) => {
+  handleLogin = async (e) => {
     e.preventDefault()
 
     try {
@@ -45,12 +45,12 @@ class App extends React.Component {
       window.localStorage.setItem("loggedBlogged", JSON.stringify(user))
       this.setState({
         user,
-        alert : { type : "success", message : "login successful" }
+        alert : { type : "success", message : "Login successful" }
       })
 
     } catch (ex) {
       this.setState({
-        alert : { type : "fail", message : "invalid username or password" }
+        alert : { type : "fail", message : "Invalid username or password" }
       })
     }
 
@@ -60,15 +60,15 @@ class App extends React.Component {
     }, 5000)
   }
 
-  logout = (event) => {
-    event.preventDefault()
+  handleLogout = (e) => {
+    e.preventDefault()
 
     blogService.setToken(null)
     window.localStorage.removeItem("loggedBlogged")
 
     this.setState({
       user : null,
-      alert : { type : "success", message : "now logged out" }
+      alert : { type : "success", message : "Now logged out" }
     })
     setTimeout(() => {
       this.setState({ alert : null })
@@ -80,7 +80,7 @@ class App extends React.Component {
       <div>
         <h2>Please provide credentials</h2>
         <Form
-          handleSubmit={this.login}
+          handleSubmit={this.handleLogin}
           handleField={this.handleFormChange}
           fields={[
             { type : "text", name : "username", value : this.state.username },
@@ -96,7 +96,7 @@ class App extends React.Component {
         <h2>Blogs</h2>
         <p>
           Logged in as {this.state.user.name}&nbsp;
-          <button type="submit" onClick={this.logout}>Logout</button>
+          <button onClick={this.handleLogout}>Logout</button>
         </p>
         <Blogs />
       </div>

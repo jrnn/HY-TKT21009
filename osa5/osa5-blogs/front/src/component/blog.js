@@ -5,27 +5,30 @@ import blogService from "../service/blog_service"
 class Blog extends React.Component {
   constructor(props) {
     super(props)
-    this.state = {
-      details : false,
-      key : 0
-    }
-  }
-
-  like = (e) => {
-    e.preventDefault()
-
-    this.props.blog.likes = this.props.blog.likes + 1
-    blogService.update(this.props.blog)
-    this.setState({ key : Math.random() })
+    this.state = { details : false, key : 0 }
   }
 
   toggle = () => {
     this.setState({ details : !this.state.details })
   }
 
+  like = async (e) => {
+    e.preventDefault()
+
+    this.props.blog.likes = this.props.blog.likes + 1
+    await blogService.update(this.props.blog)
+    this.setState({ key : Math.random() })
+  }
+
   render() {
     let cursor = { cursor : "pointer" }
     let details = { display : this.state.details ? "" : "none" }
+    let addedBy
+    try {
+      addedBy = this.props.blog.user.name
+    } catch (ex) {
+      addedBy = "anonymous"
+    }
 
     return (
       <div className="blog-entry">
@@ -40,7 +43,12 @@ class Blog extends React.Component {
             {this.props.blog.likes} likes&nbsp;
             <button type="submit" onClick={this.like}>Like</button>
           </div>
-          <div className="blog-entry-details">added by {this.props.blog.user.name}</div>
+          <div className="blog-entry-details">added by {addedBy}</div>
+          <div className="blog-entry-details">
+            <button name={this.props.blog.id} onClick={this.props.handleRemove}>
+              Delete
+            </button>
+          </div>
         </div>
       </div>
     )

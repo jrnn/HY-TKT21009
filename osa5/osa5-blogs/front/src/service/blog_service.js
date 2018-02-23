@@ -29,4 +29,9 @@ const update = async (blog) => {
   await axios.put(url + `/${blog.id}`, { likes : blog.likes })
 }
 
-export default { findAll, findOne, save, setToken, update }
+const remove = async (id) => {
+  let config = { headers : { "Authorization" : token }}
+  await axios.delete(url + `/${id}`, config)
+}
+
+export default { findAll, findOne, remove, save, setToken, update }

@@ -19,6 +19,10 @@ class Blogs extends React.Component {
   }
 
   componentDidMount() {
+    this.refreshBlogs()
+  }
+
+  refreshBlogs() {
     blogService
       .findAll()
       .then(blogs => this.setState({ blogs }))
@@ -44,7 +48,7 @@ class Blogs extends React.Component {
       this.setState({
         title : "", author : "", url : "",
         blogs : this.state.blogs.concat(blog),
-        alert : { type : "success", message : "new blog added" }
+        alert : { type : "success", message : "New blog added" }
       })
 
     } catch (ex) {
@@ -58,17 +62,42 @@ class Blogs extends React.Component {
     }, 5000)
   }
 
+  remove = async (e) => {
+    e.preventDefault()
+    let id = e.target.name
+
+    if (window.confirm("Are you sure fo' shizzle?")) {
+      try {
+        await blogService.remove(id)
+        await this.refreshBlogs()
+        this.setState({
+          alert : { type : "success", message : "Blog successfully deleted" }
+        })
+
+      } catch (ex) {
+        this.setState({
+          alert : { type : "fail", message : "Dayum! Something went wrong" }
+        })
+      }
+    }
+
+    setTimeout(() => {
+      this.setState({ alert : null })
+    }, 5000)
+  }
+
   render() {
     let blogsInOrder = () => (
       <div>
         {this.state.blogs
           .sort(function(b1, b2) { return b2.likes - b1.likes })
           .map(blog =>
-            <Blog key={blog.id} blog={blog} />
+            <Blog key={blog.id} blog={blog} handleRemove={this.remove} />
           )
         }
       </div>
     )
+
     return(
       <div>
         {blogsInOrder()}

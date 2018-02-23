@@ -1,7 +1,7 @@
 import React from "react"
 
 const Alert = ({ alert }) => {
-  if ( !alert ) {
+  if (!alert) {
     return (
       <div className="alert">&nbsp;</div>
     )
