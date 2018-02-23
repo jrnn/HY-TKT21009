@@ -1,6 +1,7 @@
 import React from "react"
-import AddBlog from "./component/add_blog"
-import Blog from "./component/blog"
+
+import Alert from "./component/alert"
+import Blogs from "./component/blogs"
 import LoginForm from "./component/login_form"
 import blogService from "./service/blog_service"
 import loginService from "./service/login_service"
@@ -9,23 +10,16 @@ class App extends React.Component {
   constructor (props) {
     super(props)
     this.state = {
-      blogs : [],    // siirrä ehkä kaikki blogeihin liittyvä erilliseen "Blogs" komponenttiin?
-      error : null,
+      alert : null,
       user : null,
       username : "",
-      password : "",
-      title : "",
-      author : "",
-      url : ""
+      password : ""
     }
   }
 
   componentDidMount() {
-    blogService
-      .findAll()
-      .then(blogs => this.setState({ blogs }))
-
     let user = window.localStorage.getItem("loggedBlogged")
+
     if (user) {
       user = JSON.parse(user)
       this.setState({ user })
@@ -33,12 +27,12 @@ class App extends React.Component {
     }
   }
 
-  handleFormChange = (event) => {
-    this.setState({ [event.target.name] : event.target.value })
+  handleFormChange = (e) => {
+    this.setState({ [e.target.name] : e.target.value })
   }
 
-  login = async (event) => {
-    event.preventDefault()
+  login = async (e) => {
+    e.preventDefault()
 
     try {
       let user = await loginService
@@ -47,49 +41,40 @@ class App extends React.Component {
           password : this.state.password
         })
 
-      this.setState({ user })
       blogService.setToken(user.token)
       window.localStorage.setItem("loggedBlogged", JSON.stringify(user))
+      this.setState({
+        user,
+        alert : {
+          type : "success", message : "login successful" }
+      })
 
     } catch (ex) {
-      this.setState({ error : "invalid username or password" })
-      setTimeout(() => {
-        this.setState({ error : null })
-      }, 5000)
+      this.setState({ alert : {
+        type : "fail", message : "invalid username or password" }
+      })
     }
 
     this.setState({ username : "", password : "" })
+    setTimeout(() => {
+      this.setState({ alert : null })
+    }, 5000)
   }
 
   logout = (event) => {
     event.preventDefault()
-    this.setState({ user : null })
+
+    blogService.setToken(null)
     window.localStorage.removeItem("loggedBlogged")
-  }
 
-  addBlog = async (event) => {
-    event.preventDefault()
-
-    try {
-      let blog = await blogService
-        .save({
-          title : this.state.title,
-          author : this.state.author,
-          url : this.state.url
-        })
-
-      blog = await blogService.findOne(blog._id)
-      this.setState({
-        title : "", author : "", url : "",
-        blogs : this.state.blogs.concat(blog)
-      })
-
-    } catch (ex) {
-      this.setState({ error : "check your inputs" })
-      setTimeout(() => {
-        this.setState({ error : null })
-      }, 5000)
-    }
+    this.setState({
+      user : null,
+      alert : {
+        type : "success", message : "now logged out" }
+    })
+    setTimeout(() => {
+      this.setState({ alert : null })
+    }, 5000)
   }
 
   render() {
@@ -105,38 +90,23 @@ class App extends React.Component {
       </div>
     )
 
-    const blogList = () => (
-      <section>
-        <div>
-          <h2>Blogs</h2>
-          <p>
-            Logged in as {this.state.user.name}
-            <button type="submit" onClick={this.logout}>Logout</button>
-          </p>
-          <ul>
-            {this.state.blogs.map(b =>
-              <Blog key={b.id} blog={b} />
-            )}
-          </ul>
-        </div>
-        <div>
-          <h2>Add new blog</h2>
-          <AddBlog
-            add={this.addBlog}
-            handler={this.handleFormChange}
-            title={this.state.title}
-            author={this.state.author}
-            url={this.state.url}
-          />
-        </div>
-      </section>
+    const blogs = () => (
+      <div>
+        <h2>Blogs</h2>
+        <p>
+          Logged in as {this.state.user.name}
+          <button type="submit" onClick={this.logout}>Logout</button>
+        </p>
+        <Blogs />
+      </div>
     )
 
     return (
       <div>
+        <Alert alert={this.state.alert} />
         {this.state.user === null
           ? loginForm()
-          : blogList()
+          : blogs()
         }
       </div>
     )

@@ -7,23 +7,20 @@ const setToken = (newToken) => {
 }
 
 const findAll = async () => {
-  let res = await axios
-    .get(url)
+  let res = await axios.get(url)
 
   return res.data
 }
 
 const findOne = async (id) => {
-  let res = await axios
-    .get(url + `/${id}`)
+  let res = await axios.get(url + `/${id}`)
 
   return res.data
 }
 
 const save = async (blog) => {
   let config = { headers : { "Authorization" : token }}
-  let res = await axios
-    .post(url, blog, config)
+  let res = await axios.post(url, blog, config)
 
   return res.data
 }
