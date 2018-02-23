@@ -23,11 +23,22 @@ class Blog extends React.Component {
   render() {
     let cursor = { cursor : "pointer" }
     let details = { display : this.state.details ? "" : "none" }
-    let addedBy
-    try {
-      addedBy = this.props.blog.user.name
-    } catch (ex) {
-      addedBy = "anonymous"
+    let addedBy = this.props.blog.user.name
+
+    const deleteButton = () => {
+      let blogOwner = this.props.blog.user.username
+
+      if (!blogOwner || blogOwner === this.props.user.username ) {
+        return (
+          <div className="blog-entry-details">
+            <button name={this.props.blog.id} onClick={this.props.handleRemove}>
+              Delete
+            </button>
+          </div>
+        )
+      }
+
+      return(<div className="blog-entry-details"></div>)
     }
 
     return (
@@ -43,12 +54,10 @@ class Blog extends React.Component {
             {this.props.blog.likes} likes&nbsp;
             <button type="submit" onClick={this.like}>Like</button>
           </div>
-          <div className="blog-entry-details">added by {addedBy}</div>
           <div className="blog-entry-details">
-            <button name={this.props.blog.id} onClick={this.props.handleRemove}>
-              Delete
-            </button>
+            added by {addedBy ? addedBy : "anonymous"}
           </div>
+          {deleteButton()}
         </div>
       </div>
     )

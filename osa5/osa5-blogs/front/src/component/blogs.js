@@ -14,7 +14,8 @@ class Blogs extends React.Component {
       blogs : [],
       title : "",
       author : "",
-      url : ""
+      url : "",
+      user : props.user || null
     }
   }
 
@@ -92,7 +93,12 @@ class Blogs extends React.Component {
         {this.state.blogs
           .sort(function(b1, b2) { return b2.likes - b1.likes })
           .map(blog =>
-            <Blog key={blog.id} blog={blog} handleRemove={this.remove} />
+            <Blog
+              key={blog.id}
+              blog={blog}
+              user={this.state.user}
+              handleRemove={this.remove}
+            />
           )
         }
       </div>
@@ -100,9 +106,18 @@ class Blogs extends React.Component {
 
     return(
       <div>
-        {blogsInOrder()}
         <div>
           <Alert alert={this.state.alert} />
+          <h2>Blogs</h2>
+          <p>
+            Logged in as {this.state.user.name}&nbsp;
+            <button onClick={this.props.handleLogout}>Logout</button>
+          </p>
+        </div>
+        <div>
+          {blogsInOrder()}
+        </div>
+        <div>
           <h2>Add new blog</h2>
           <Togglable button="Add new blog" ref={c => this.addBlog = c}>
             <Form

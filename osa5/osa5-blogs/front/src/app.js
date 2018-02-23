@@ -43,10 +43,7 @@ class App extends React.Component {
 
       blogService.setToken(user.token)
       window.localStorage.setItem("loggedBlogged", JSON.stringify(user))
-      this.setState({
-        user,
-        alert : { type : "success", message : "Login successful" }
-      })
+      this.setState({ user })
 
     } catch (ex) {
       this.setState({
@@ -78,6 +75,7 @@ class App extends React.Component {
   render() {
     const loginForm = () => (
       <div>
+        <Alert alert={this.state.alert} />
         <h2>Please provide credentials</h2>
         <Form
           handleSubmit={this.handleLogin}
@@ -91,23 +89,11 @@ class App extends React.Component {
       </div>
     )
 
-    const blogs = () => (
-      <div>
-        <h2>Blogs</h2>
-        <p>
-          Logged in as {this.state.user.name}&nbsp;
-          <button onClick={this.handleLogout}>Logout</button>
-        </p>
-        <Blogs />
-      </div>
-    )
-
     return (
       <div>
-        <Alert alert={this.state.alert} />
         {this.state.user === null
           ? loginForm()
-          : blogs()
+          : <Blogs user={this.state.user} handleLogout={this.handleLogout} />
         }
       </div>
     )
