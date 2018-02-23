@@ -2,8 +2,8 @@ import React from "react"
 
 import Alert from "./component/alert"
 import Blogs from "./component/blogs"
-import LoginForm from "./component/login_form"
 import blogService from "./service/blog_service"
+import Form from "./component/form"
 import loginService from "./service/login_service"
 
 class App extends React.Component {
@@ -45,13 +45,12 @@ class App extends React.Component {
       window.localStorage.setItem("loggedBlogged", JSON.stringify(user))
       this.setState({
         user,
-        alert : {
-          type : "success", message : "login successful" }
+        alert : { type : "success", message : "login successful" }
       })
 
     } catch (ex) {
-      this.setState({ alert : {
-        type : "fail", message : "invalid username or password" }
+      this.setState({
+        alert : { type : "fail", message : "invalid username or password" }
       })
     }
 
@@ -69,8 +68,7 @@ class App extends React.Component {
 
     this.setState({
       user : null,
-      alert : {
-        type : "success", message : "now logged out" }
+      alert : { type : "success", message : "now logged out" }
     })
     setTimeout(() => {
       this.setState({ alert : null })
@@ -81,11 +79,14 @@ class App extends React.Component {
     const loginForm = () => (
       <div>
         <h2>Please provide credentials</h2>
-        <LoginForm
-          login={this.login}
-          handler={this.handleFormChange}
-          username={this.state.username}
-          password={this.state.password}
+        <Form
+          handleSubmit={this.login}
+          handleField={this.handleFormChange}
+          fields={[
+            { type : "text", name : "username", value : this.state.username },
+            { type : "password", name : "password", value : this.state.password }
+          ]}
+          submit="Login"
         />
       </div>
     )
@@ -95,7 +96,9 @@ class App extends React.Component {
         <h2>Blogs</h2>
         <p>
           Logged in as {this.state.user.name}
-          <button type="submit" onClick={this.logout}>Logout</button>
+          <button type="submit" className="button" onClick={this.logout}>
+            Logout
+          </button>
         </p>
         <Blogs />
       </div>

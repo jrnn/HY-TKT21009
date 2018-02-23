@@ -1,9 +1,10 @@
 import React from "react"
 
-import AddBlog from "./add_blog"
 import Alert from "./alert"
 import Blog from "./blog"
 import blogService from "../service/blog_service"
+import Form from "./form"
+import Togglable from "./togglable"
 
 class Blogs extends React.Component {
   constructor(props) {
@@ -46,8 +47,8 @@ class Blogs extends React.Component {
       })
 
     } catch (ex) {
-      this.setState({ alert :
-        { type : "fail", message : "Check your inputs" }
+      this.setState({
+        alert : { type : "fail", message : "Check your inputs" }
       })
     }
 
@@ -69,13 +70,18 @@ class Blogs extends React.Component {
         <div>
           <Alert alert={this.state.alert} />
           <h2>Add new blog</h2>
-          <AddBlog
-            add={this.add}
-            handler={this.handleFormChange}
-            title={this.state.title}
-            author={this.state.author}
-            url={this.state.url}
-          />
+          <Togglable button="Add new blog">
+            <Form
+              handleSubmit={this.add}
+              handleField={this.handleFormChange}
+              fields={[
+                { type : "text", name : "title", value : this.state.title },
+                { type : "text", name : "author", value : this.state.author },
+                { type : "text", name : "url", value : this.state.url }
+              ]}
+              submit="Add blog"
+            />
+          </Togglable>
         </div>
       </div>
     )
