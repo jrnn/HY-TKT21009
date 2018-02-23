@@ -59,13 +59,19 @@ class Blogs extends React.Component {
   }
 
   render() {
+    let blogsInOrder = () => (
+      <div>
+        {this.state.blogs
+          .sort(function(b1, b2) { return b2.likes - b1.likes })
+          .map(blog =>
+            <Blog key={blog.id} blog={blog} />
+          )
+        }
+      </div>
+    )
     return(
       <div>
-        <div>
-          {this.state.blogs.map(blog =>
-            <Blog key={blog.id} blog={blog} />
-          )}
-        </div>
+        {blogsInOrder()}
         <div>
           <Alert alert={this.state.alert} />
           <h2>Add new blog</h2>
