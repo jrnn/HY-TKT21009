@@ -1,4 +1,5 @@
 import React from "react"
+import PropTypes from "prop-types"
 
 import blogService from "../service/blog_service"
 
@@ -6,6 +7,11 @@ class Blog extends React.Component {
   constructor(props) {
     super(props)
     this.state = { details : false, key : 0 }
+  }
+  static propTypes = {
+    blog : PropTypes.object.isRequired,
+    user : PropTypes.object.isRequired,
+    handleRemove : PropTypes.func.isRequired
   }
 
   toggle = () => {

@@ -1,4 +1,5 @@
 import React from "react"
+import PropTypes from "prop-types"
 
 const Form = ({ handleSubmit, handleField, fields, submit }) => (
   <form onSubmit={handleSubmit}>
@@ -26,5 +27,12 @@ const Form = ({ handleSubmit, handleField, fields, submit }) => (
     </table>
   </form>
 )
+
+Form.propTypes = {
+  handleSubmit : PropTypes.func.isRequired,
+  handleField : PropTypes.func.isRequired,
+  fields : PropTypes.array.isRequired,
+  submit : PropTypes.string.isRequired
+}
 
 export default Form

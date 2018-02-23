@@ -1,4 +1,5 @@
 import React from "react"
+import PropTypes from "prop-types"
 
 import Alert from "./alert"
 import Blog from "./blog"
@@ -17,6 +18,10 @@ class Blogs extends React.Component {
       url : "",
       user : props.user || null
     }
+  }
+  static propTypes = {
+    user : PropTypes.object.isRequired,
+    handleLogout : PropTypes.func.isRequired
   }
 
   componentDidMount() {
