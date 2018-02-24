@@ -49,10 +49,10 @@ class Blog extends React.Component {
 
     return (
       <div className="blog-entry">
-        <div onClick={this.toggle} style={cursor}>
+        <div onClick={this.toggle} style={cursor} className="tests-header">
           {this.props.blog.title} ({this.props.blog.author})
         </div>
-        <div style={details}>
+        <div style={details} className="tests-details">
           <div className="blog-entry-details">
             <a href={this.props.blog.url}>{this.props.blog.url}</a>
           </div>
