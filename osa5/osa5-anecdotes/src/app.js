@@ -1,5 +1,6 @@
 import React from 'react'
 
+import AddNew from "./component/add_new"
 import Anecdote from "./component/anecdote"
 import Title from "./component/title"
 
@@ -26,7 +27,7 @@ class App extends React.Component {
         <Title title="Anecdotes" />
         {anecdotes()}
         <Title title="Add new" />
-        <p>(Under construction)</p>
+        <AddNew store={this.props.store} />
       </div>
     )
   }

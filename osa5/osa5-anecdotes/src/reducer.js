@@ -38,6 +38,11 @@ const anecdoteReducer = (state = initState, action) => {
           : votedAnecdote
         ).sort(sortByVotes)
 
+    case "ADD_NEW" :
+      let newAnecdote = asObject(action.data.content)
+      newAnecdote.votes = 0
+      return [ ...state, newAnecdote ]
+
     default :
       return state
   }
