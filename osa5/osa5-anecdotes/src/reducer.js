@@ -17,7 +17,13 @@ const asObject = (anecdote) => {
   }
 }
 
-const initState = anecdotes.map(asObject)
+const sortByVotes = (a1, a2) => {
+  return (a2.votes - a1.votes)
+}
+
+const initState = anecdotes
+  .map(asObject)
+  .sort(sortByVotes)
 
 const anecdoteReducer = (state = initState, action) => {
   switch (action.type) {
@@ -29,7 +35,8 @@ const anecdoteReducer = (state = initState, action) => {
       return state
         .map(a => a.id !== id
           ? a
-          : votedAnecdote)
+          : votedAnecdote
+        ).sort(sortByVotes)
 
     default :
       return state
