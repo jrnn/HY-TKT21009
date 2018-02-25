@@ -17,9 +17,10 @@ const unicafeReducer = (state = initState, action) => {
 
     case "RESET" :
       return initState
-  }
 
-  return state
+    default :
+      return state
+  }
 }
 
 export default unicafeReducer
