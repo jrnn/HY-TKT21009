@@ -19,7 +19,7 @@ const AnecdoteForm = (props) => (
 const addNew = (e, props) => {
   e.preventDefault()
 
-  let content = e.target.content.value
+  let content = e.target.content.value.trim()
   let notification = `Added new anecdote: "${content}"`
 
   if (content.length > 0) {

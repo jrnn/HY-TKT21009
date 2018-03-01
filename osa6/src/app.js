@@ -5,13 +5,11 @@ import Notification from "./component/notification"
 
 class App extends React.Component {
   render() {
-    let store = this.props.store
-
     return (
       <div>
         <h1>Programming anecdotes</h1>
         <Notification />
-        <AnecdoteList store={store} />
+        <AnecdoteList />
         <AnecdoteForm />
       </div>
     )
