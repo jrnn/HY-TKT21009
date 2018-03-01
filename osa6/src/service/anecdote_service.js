@@ -1,5 +1,4 @@
 import axios from "axios"
-
 const url = "http://localhost:3001/anecdotes"
 
 const findAll = async () => {
@@ -7,4 +6,10 @@ const findAll = async () => {
   return res.data
 }
 
-export default { findAll }
+const saveOne = async (content) => {
+  let anecdote = { content, votes : 0 }
+  let res = await axios.post(url, anecdote)
+  return res.data
+}
+
+export default { findAll, saveOne }

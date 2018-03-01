@@ -1,17 +1,8 @@
-const asObject = (content) => {
-  return {
-    id : (1000000 * Math.random()).toFixed(0),
-    content,
-    votes : 0
-  }
-}
-
 const anecdoteReducer = (state = [], action) => {
   switch (action.type) {
     case "VOTE_ANECDOTE" : {
-      let id = action.data.id
-      let old = state.filter(a => a.id !== id)
-      let voted = state.find(a => a.id === id)
+      let old = state.filter(a => a.id !== action.data.id)
+      let voted = state.find(a => a.id === action.data.id)
 
       return [ ...old, { ...voted, votes : voted.votes + 1 } ]
     }
@@ -34,10 +25,10 @@ export const voteAnecdote = (id) => {
   }
 }
 
-export const addAnecdote = (content) => {
+export const addAnecdote = (anecdote) => {
   return {
     type : "ADD_ANECDOTE",
-    data : { anecdote : asObject(content) }
+    data : { anecdote }
   }
 }
 
