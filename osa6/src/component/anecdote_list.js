@@ -28,7 +28,7 @@ class AnecdoteList extends React.Component {
     return (
       <div>
         <h2>Anecdotes</h2>
-        <Filter store={store} />
+        <Filter />
         {getAnecdotes().map(anecdote =>
           <p key={anecdote.id}>
             {anecdote.content}<br/>

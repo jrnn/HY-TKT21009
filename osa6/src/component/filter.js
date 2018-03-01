@@ -1,23 +1,18 @@
 import React from "react"
+import { connect } from "react-redux"
 import { setFilter } from "../reducer/filter_reducer"
 
-class Filter extends React.Component {
-  handle = (e) => {
-    let filter = e.target.value
-    this.props.store.dispatch(setFilter(filter))
-  }
+const Filter = (props) => (
+  <div>
+    Filter&nbsp;
+    <input
+      type="text"
+      onChange={e => props.setFilter(e.target.value)}
+    />
+  </div>
+)
 
-  render() {
-    return (
-      <div>
-        Filter&nbsp;
-        <input
-          type="text"
-          onChange={this.handle}
-        />
-      </div>
-    )
-  }
-}
-
-export default Filter
+export default connect(
+  null,
+  { setFilter }
+)(Filter)

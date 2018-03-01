@@ -1,41 +1,39 @@
 import React from "react"
+import { connect } from "react-redux"
 import { addAnecdote } from "../reducer/anecdote_reducer"
 import { setNotification, hideNotification } from "../reducer/notification_reducer"
 
-class AnecdoteForm extends React.Component {
-  addNew = (e) => {
-    e.preventDefault()
+const AnecdoteForm = (props) => (
+  <div>
+    <h2>Add new</h2>
+    <form onSubmit={e => addNew(e, props)}>
+      <input
+        type="text"
+        name="content"
+      />
+      <button type="submit">Add</button>
+    </form>
+  </div>
+)
 
-    let content = e.target.content.value
-    let message = `Added new anecdote: "${content}"`
+const addNew = (e, props) => {
+  e.preventDefault()
 
-    if (content.length > 0) {
-      this.props.store
-        .dispatch(addAnecdote(content))
-      this.props.store
-        .dispatch(setNotification(message))
-      setTimeout(() => {
-        this.props.store.dispatch(hideNotification())
-      }, 5000)
+  let content = e.target.content.value
+  let notification = `Added new anecdote: "${content}"`
 
-      e.target.content.value = ""
-    }
-  }
+  if (content.length > 0) {
+    props.addAnecdote(content)
+    props.setNotification(notification)
+    setTimeout(() => {
+      props.hideNotification()
+    }, 5000)
 
-  render() {
-    return (
-      <div>
-        <h2>Add new</h2>
-        <form onSubmit={this.addNew}>
-          <input
-            type="text"
-            name="content"
-          />
-          <button type="submit">Add</button>
-        </form>
-      </div>
-    )
+    e.target.content.value = ""
   }
 }
 
-export default AnecdoteForm
+export default connect(
+  null,
+  { addAnecdote, setNotification, hideNotification }
+)(AnecdoteForm)

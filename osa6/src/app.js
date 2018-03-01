@@ -10,9 +10,9 @@ class App extends React.Component {
     return (
       <div>
         <h1>Programming anecdotes</h1>
-        <Notification store={store} />
+        <Notification />
         <AnecdoteList store={store} />
-        <AnecdoteForm store={store} />
+        <AnecdoteForm />
       </div>
     )
   }
