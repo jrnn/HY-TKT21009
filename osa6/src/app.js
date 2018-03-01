@@ -5,12 +5,14 @@ import AnecdoteList from "./component/anecdote_list"
 
 class App extends React.Component {
   render() {
+    let store = this.props.store
+
     return (
       <div>
         <h1>Programming anecdotes</h1>
-        <Notification />
-        <AnecdoteList store={this.props.store} />
-        <AnecdoteForm store={this.props.store} />
+        <Notification store={store} />
+        <AnecdoteList store={store} />
+        <AnecdoteForm store={store} />
       </div>
     )
   }

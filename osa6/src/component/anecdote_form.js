@@ -1,4 +1,6 @@
 import React from "react"
+import { addAnecdote } from "../reducer/anecdote_reducer"
+import { setNotification, hideNotification } from "../reducer/notification_reducer"
 
 class AnecdoteForm extends React.Component {
   constructor(props) {
@@ -14,10 +16,16 @@ class AnecdoteForm extends React.Component {
   addNew = (e) => {
     e.preventDefault()
     let content = this.state.content.trim()
+    let message = `Added new anecdote: "${content}"`
 
     if (content.length > 0) {
       this.props.store
-        .dispatch({ type : "CREATE", content })
+        .dispatch(addAnecdote(content))
+      this.props.store
+        .dispatch(setNotification(message))
+      setTimeout(() => {
+        this.props.store.dispatch(hideNotification())
+      }, 5000)
       this.setState({ content : "" })
     }
   }
