@@ -3,19 +3,10 @@ import { addAnecdote } from "../reducer/anecdote_reducer"
 import { setNotification, hideNotification } from "../reducer/notification_reducer"
 
 class AnecdoteForm extends React.Component {
-  constructor(props) {
-    super(props)
-    this.state = { content : "" }
-  }
-
-  handleInput = (e) => {
-    let content = e.target.value
-    this.setState({ content })
-  }
-
   addNew = (e) => {
     e.preventDefault()
-    let content = this.state.content.trim()
+
+    let content = e.target.content.value
     let message = `Added new anecdote: "${content}"`
 
     if (content.length > 0) {
@@ -26,7 +17,8 @@ class AnecdoteForm extends React.Component {
       setTimeout(() => {
         this.props.store.dispatch(hideNotification())
       }, 5000)
-      this.setState({ content : "" })
+
+      e.target.content.value = ""
     }
   }
 
@@ -37,8 +29,7 @@ class AnecdoteForm extends React.Component {
         <form onSubmit={this.addNew}>
           <input
             type="text"
-            value={this.state.content}
-            onChange={this.handleInput}
+            name="content"
           />
           <button type="submit">Add</button>
         </form>

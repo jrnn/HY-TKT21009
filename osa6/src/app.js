@@ -1,7 +1,7 @@
 import React from "react"
-import Notification from "./component/notification"
 import AnecdoteForm from "./component/anecdote_form"
 import AnecdoteList from "./component/anecdote_list"
+import Notification from "./component/notification"
 
 class App extends React.Component {
   render() {
