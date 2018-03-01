@@ -12,4 +12,9 @@ const saveOne = async (content) => {
   return res.data
 }
 
-export default { findAll, saveOne }
+const updateOne = async (anecdote) => {
+  anecdote.votes = anecdote.votes + 1
+  await axios.put(url + `/${anecdote.id}`, anecdote)
+}
+
+export default { findAll, saveOne, updateOne }
