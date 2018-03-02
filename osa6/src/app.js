@@ -1,15 +1,14 @@
 import React from "react"
 import { connect } from "react-redux"
-import anecdoteService from "./service/anecdote_service"
-import { initAnecdotes } from "./reducer/anecdote_reducer"
+
 import AnecdoteForm from "./component/anecdote_form"
 import AnecdoteList from "./component/anecdote_list"
 import Notification from "./component/notification"
+import { initAnecdotes } from "./reducer/anecdote_reducer"
 
 class App extends React.Component {
   componentDidMount = async () => {
-    let anecdotes = await anecdoteService.findAll()
-    this.props.initAnecdotes(anecdotes)
+    this.props.initAnecdotes()
   }
 
   render() {
