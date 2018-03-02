@@ -1,6 +1,6 @@
 import React from "react"
 import { connect } from "react-redux"
-import anecdoteService from "../service/anecdote_service"
+
 import { addAnecdote } from "../reducer/anecdote_reducer"
 import { setNotification, hideNotification } from "../reducer/notification_reducer"
 
@@ -25,9 +25,7 @@ const addNew = async (e, props) => {
 
   if (content.length > 0) {
     e.target.content.value = ""
-
-    let anecdote = await anecdoteService.saveOne(content)
-    props.addAnecdote(anecdote)
+    props.addAnecdote(content)
 
     props.setNotification(notification)
     setTimeout(() => {props.hideNotification()}, 5000)

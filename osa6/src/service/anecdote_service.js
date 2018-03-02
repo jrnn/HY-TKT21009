@@ -13,7 +13,6 @@ const saveOne = async (content) => {
 }
 
 const updateOne = async (anecdote) => {
-  anecdote.votes = anecdote.votes + 1
   await axios.put(url + `/${anecdote.id}`, anecdote)
 }
 
