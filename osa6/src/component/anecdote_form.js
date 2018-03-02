@@ -2,7 +2,7 @@ import React from "react"
 import { connect } from "react-redux"
 
 import { addAnecdote } from "../reducer/anecdote_reducer"
-import { setNotification, hideNotification } from "../reducer/notification_reducer"
+import { setNotification } from "../reducer/notification_reducer"
 
 const AnecdoteForm = (props) => (
   <div>
@@ -25,14 +25,13 @@ const addNew = async (e, props) => {
 
   if (content.length > 0) {
     e.target.content.value = ""
-    props.addAnecdote(content)
 
-    props.setNotification(notification)
-    setTimeout(() => {props.hideNotification()}, 5000)
+    props.addAnecdote(content)
+    props.setNotification(notification, 5)
   }
 }
 
 export default connect(
   null,
-  { addAnecdote, setNotification, hideNotification }
+  { addAnecdote, setNotification }
 )(AnecdoteForm)

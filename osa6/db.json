@@ -7,7 +7,7 @@
     },
     {
       "content": "Adding manpower to a late software project makes it later.",
-      "votes": 4,
+      "votes": 5,
       "id": "~8bzp0M"
     },
     {
@@ -17,12 +17,12 @@
     },
     {
       "content": "Any fool can write code that a computer can understand. Good programmers write code that humans can understand.",
-      "votes": 7,
+      "votes": 8,
       "id": "Sr4cyfw"
     },
     {
       "content": "Premature optimization is the root of all evil.",
-      "votes": 2,
+      "votes": 3,
       "id": "VC8gfyP"
     },
     {
@@ -32,18 +32,23 @@
     },
     {
       "content": "Life sucks and then you die.",
-      "votes": 1,
+      "votes": 2,
       "id": "UoGvBCS"
     },
     {
       "content": "I'm so developer my Backbone is Angular.",
-      "votes": 5,
+      "votes": 7,
       "id": "Dj~RrTD"
     },
     {
       "content": "Some people are like Slinkies. Not good for anything, but you can't help laughing when you see them tumbling down the stairs.",
       "votes": 9,
       "id": "XqrnS0B"
+    },
+    {
+      "content": "What's yours is mine, what's mine is still mine.",
+      "votes": 1,
+      "id": "eAU3j8B"
     }
   ]
 }

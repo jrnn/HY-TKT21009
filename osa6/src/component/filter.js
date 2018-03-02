@@ -1,5 +1,6 @@
 import React from "react"
 import { connect } from "react-redux"
+
 import { setFilter } from "../reducer/filter_reducer"
 
 const Filter = (props) => (

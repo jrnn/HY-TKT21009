@@ -3,7 +3,7 @@ import { connect } from "react-redux"
 
 import Filter from "./filter"
 import { voteAnecdote } from "../reducer/anecdote_reducer"
-import { setNotification, hideNotification } from "../reducer/notification_reducer"
+import { setNotification } from "../reducer/notification_reducer"
 
 const AnecdoteList = (props) => (
   <div>
@@ -11,8 +11,8 @@ const AnecdoteList = (props) => (
     <Filter />
     {props.listAnecdotes.map(a =>
       <p key={a.id}>
-        {a.content}<br/>
-        Has {a.votes} votes
+        &quot;{a.content}&quot;<br/>
+        Has {a.votes} votes&nbsp;
         <button onClick={() => vote(a, props)}>Vote</button>
       </p>
     )}
@@ -27,8 +27,7 @@ const listAnecdotes = (anecdotes, filter) => {
 
 const vote = async (anecdote, props) => {
   props.voteAnecdote(anecdote)
-  props.setNotification(`You voted "${anecdote.content}"`)
-  setTimeout(() => {props.hideNotification()}, 5000)
+  props.setNotification(`You voted "${anecdote.content}"`, 5)
 }
 
 const mapStateToProps = (state) => {
@@ -39,5 +38,5 @@ const mapStateToProps = (state) => {
 
 export default connect(
   mapStateToProps,
-  { setNotification, hideNotification, voteAnecdote }
+  { setNotification, voteAnecdote }
 )(AnecdoteList)
