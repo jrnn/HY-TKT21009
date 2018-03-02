@@ -14,6 +14,9 @@ class App extends React.Component {
     }
   }
 
+  findById = (id) => this.state.anecdotes
+    .find(a => a.id === id)
+
   addNew = (anecdote) => {
     anecdote.id = (Math.random() * 100000).toFixed(0)
     this.setState({
@@ -22,10 +25,9 @@ class App extends React.Component {
   }
 
   vote = (id) => {
-    let anecdote = this.state.anecdotes
-      .find(a => a.id === id)
-
+    let anecdote = this.findById(id)
     anecdote.votes = anecdote.votes + 1
+
     let anecdotes = this.state.anecdotes
       .map(a => a.id === id ? anecdote : a)
 
@@ -39,8 +41,10 @@ class App extends React.Component {
           <h1>Software anecdotes</h1>
           <Menu />
           <Content
-            anecdotes={this.state.anecdotes}
             addNew={this.addNew}
+            anecdotes={this.state.anecdotes}
+            findById={this.findById}
+            vote={this.vote}
           />
           <Footer />
         </div>
