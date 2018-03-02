@@ -22,6 +22,7 @@ class CreateNew extends React.Component {
       votes : 0
     })
     this.setState({ content : "", author : "", info : "" })
+    this.props.history.push("/")
   }
 
   render() {

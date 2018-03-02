@@ -23,7 +23,12 @@ const Content = ({ addNew, anecdotes, findById, vote }) => (
     />
     <Route
       exact path="/create"
-      render={() => <CreateNew addNew={addNew} />}
+      render={({history}) =>
+        <CreateNew
+          history={history}
+          addNew={addNew}
+        />
+      }
     />
     <Route
       exact path="/about"
