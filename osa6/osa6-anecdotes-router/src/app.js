@@ -11,7 +11,7 @@ class App extends React.Component {
     super(props)
     this.state = {
       anecdotes : this.props.anecdotes,
-      notification : ""
+      notification : null
     }
   }
 
@@ -25,7 +25,7 @@ class App extends React.Component {
       notification : `Added new anecdote "${anecdote.content}"`
     })
     setTimeout(() => this.setState({
-      notification : ""
+      notification : null
     }), 5000)
   }
 
@@ -45,7 +45,9 @@ class App extends React.Component {
         <div>
           <h1>Software anecdotes</h1>
           <Menu />
-          <Notification notification={this.state.notification} />
+          {this.state.notification === null
+            ? null
+            : <Notification notification={this.state.notification} />}
           <Content
             addNew={this.addNew}
             anecdotes={this.state.anecdotes}
