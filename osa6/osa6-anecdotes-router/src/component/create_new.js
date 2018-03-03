@@ -1,4 +1,5 @@
 import React from "react"
+import { Button, Form } from "semantic-ui-react"
 
 class CreateNew extends React.Component {
   constructor(props) {
@@ -29,50 +30,36 @@ class CreateNew extends React.Component {
     return(
       <div>
         <h2>Add new anecdote</h2>
-        <form onSubmit={this.handleSubmit}>
-          <table>
-            <tbody>
-              <tr>
-                <td>Content</td>
-                <td>
-                  <input
-                    type="text"
-                    name="content"
-                    value={this.state.content}
-                    onChange={this.handleChange}
-                  />
-                </td>
-              </tr>
-              <tr>
-                <td>Author</td>
-                <td>
-                  <input
-                    type="text"
-                    name="author"
-                    value={this.state.author}
-                    onChange={this.handleChange}
-                  />
-                </td>
-              </tr>
-              <tr>
-                <td>Url for more info</td>
-                <td>
-                  <input
-                    type="text"
-                    name="info"
-                    value={this.state.info}
-                    onChange={this.handleChange}
-                  />
-                </td>
-              </tr>
-              <tr>
-                <td>
-                  <button>Add</button>
-                </td>
-              </tr>
-            </tbody>
-          </table>
-        </form>
+        <Form onSubmit={this.handleSubmit}>
+          <Form.Field>
+            <input
+              type="text"
+              name="content"
+              placeholder="Content"
+              value={this.state.content}
+              onChange={this.handleChange}
+            />
+          </Form.Field>
+          <Form.Field>
+            <input
+              type="text"
+              name="author"
+              placeholder="Author"
+              value={this.state.author}
+              onChange={this.handleChange}
+            />
+          </Form.Field>
+          <Form.Field>
+            <input
+              type="text"
+              name="info"
+              placeholder="URL for more info"
+              value={this.state.info}
+              onChange={this.handleChange}
+            />
+          </Form.Field>
+          <Button type="submit">Add</Button>
+        </Form>
       </div>
     )
   }

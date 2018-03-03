@@ -1,16 +1,10 @@
 import React from "react"
-
-const style = {
-  background : "#378563",
-  color : "white",
-  fontWeight : "bold",
-  padding : 10
-}
+import { Message } from "semantic-ui-react"
 
 const Notification = ({ notification })  => (
-  <div style={style}>
-    {notification}
-  </div>
+  <Message positive>
+    <Message.Header>{notification}</Message.Header>
+  </Message>
 )
 
 export default Notification

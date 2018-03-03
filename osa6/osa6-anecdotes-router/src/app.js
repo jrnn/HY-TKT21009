@@ -1,9 +1,10 @@
 import React from "react"
 import { BrowserRouter as Router } from "react-router-dom"
+import { Container, Divider } from "semantic-ui-react"
 
 import Content from "./component/content"
 import Footer from "./component/footer"
-import Menu from "./component/menu"
+import NavBar from "./component/navbar"
 import Notification from "./component/notification"
 
 class App extends React.Component {
@@ -42,9 +43,9 @@ class App extends React.Component {
   render() {
     return (
       <Router>
-        <div>
+        <Container>
           <h1>Software anecdotes</h1>
-          <Menu />
+          <NavBar />
           {this.state.notification === null
             ? null
             : <Notification notification={this.state.notification} />}
@@ -54,8 +55,9 @@ class App extends React.Component {
             findById={this.findById}
             vote={this.vote}
           />
+          <Divider />
           <Footer />
-        </div>
+        </Container>
       </Router>
     )
   }
