@@ -11,39 +11,42 @@ class Blog extends React.Component {
     this.state = { details : false, key : 0 }
   }
   static propTypes = {
-    blog : PropTypes.object.isRequired,
-    user : PropTypes.object.isRequired
+    blog : PropTypes.object.isRequired
   }
 
-  toggle = () => {
-    this.setState({ details : !this.state.details })
-  }
+  handleToggle = () => this.setState({ details : !this.state.details })
 
-  remove = async (id) => {
+  handleDelete = async (e, id) => {
+    e.preventDefault()
+
     if (window.confirm("Are you sure fo' shizzle?")) {
       try {
-        this.props.deleteBlog(id)
-        this.props.setNotification("Blog successfully deleted", "success", 5)
+        await this.props.deleteBlog(id)
+        this.props.setNotification("Blog successfully deleted. Hooray!", "success", 5)
 
       } catch (ex) {
-        this.props.setNotification("Dayum! Something went wrong", "fail", 5)
+        this.props.setNotification("Dayum! Something went wrong.", "fail", 5)
       }
     }
   }
 
-  render() {
-    let { blog } = this.props
+  handleLike = async (e) => {
+    e.preventDefault()
+    await this.props.likeBlog(this.props.blog)
+    this.setState({ key : Math.random() })
+  }
 
-    let cursor = { cursor : "pointer" }
+  render() {
+    let { blog, user } = this.props
     let details = { display : this.state.details ? "" : "none" }
 
     const deleteButton = () => {
       let blogOwner = blog.user.username
 
-      if (!blogOwner || blogOwner === this.props.user.username ) {
+      if (!blogOwner || blogOwner === user.username ) {
         return (
           <div className="blog-entry-details">
-            <button onClick={() => this.remove(blog.id)}>
+            <button onClick={e => this.handleDelete(e, blog.id)}>
               Delete
             </button>
           </div>
@@ -55,22 +58,20 @@ class Blog extends React.Component {
 
     return (
       <div className="blog-entry">
-        <div onClick={this.toggle} style={cursor} className="tests-header">
-          {blog.title} ({blog.author})
-        </div>
-        <div style={details} className="tests-details">
+        <div
+          onClick={this.handleToggle}
+          style={{ cursor : "pointer" }}
+        >{blog.title} ({blog.author})</div>
+        <div style={details}>
           <div className="blog-entry-details">
             <a href={blog.url}>{blog.url}</a>
           </div>
           <div className="blog-entry-details">
             {blog.likes} likes&nbsp;
-            <button onClick={() => {
-              this.props.likeBlog(this.props.blog)
-              this.setState({ key : Math.random() })
-            }}>Like</button>
+            <button onClick={this.handleLike}>Like</button>
           </div>
           <div className="blog-entry-details">
-            added by {blog.user.name ? blog.user.name : "anonymous"}
+            Added by {blog.user.name ? blog.user.name : "anonymous"}
           </div>
           {deleteButton()}
         </div>
@@ -79,7 +80,9 @@ class Blog extends React.Component {
   }
 }
 
+const mapStateToProps = (state) => ({ user : state.user })
+
 export default connect(
-  null,
+  mapStateToProps,
   { deleteBlog, likeBlog, setNotification }
 )(Blog)

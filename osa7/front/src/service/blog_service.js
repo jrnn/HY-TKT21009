@@ -1,10 +1,10 @@
 import axios from "axios"
+
 const url = "/api/blogs"
 let token = null
 
-const setToken = (newToken) => {
+const setToken = (newToken) =>
   token = `bearer ${newToken}`
-}
 
 const findAll = async () => {
   let res = await axios.get(url)
@@ -19,7 +19,7 @@ const findOne = async (id) => {
 }
 
 const save = async (blog) => {
-  let config = { headers : { "Authorization" : token }}
+  let config = { headers : { "Authorization" : token } }
   let res = await axios.post(url, blog, config)
 
   return res.data
@@ -30,7 +30,7 @@ const update = async (blog) => {
 }
 
 const remove = async (id) => {
-  let config = { headers : { "Authorization" : token }}
+  let config = { headers : { "Authorization" : token } }
   await axios.delete(url + `/${id}`, config)
 }
 

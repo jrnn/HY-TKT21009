@@ -7,12 +7,10 @@ class Togglable extends React.Component {
     this.state = { visible : false }
   }
   static propTypes = {
-    button : PropTypes.string.isRequired
+    buttonLabel : PropTypes.string.isRequired
   }
 
-  toggle = () => {
-    this.setState({ visible : !this.state.visible })
-  }
+  toggle = () => this.setState({ visible : !this.state.visible })
 
   render() {
     let hide = { display : this.state.visible ? "none" : "" }
@@ -21,7 +19,7 @@ class Togglable extends React.Component {
     return(
       <div>
         <div style={hide}>
-          <button onClick={this.toggle}>{this.props.button}</button>
+          <button onClick={this.toggle}>{this.props.buttonLabel}</button>
         </div>
         <div style={show}>
           {this.props.children}

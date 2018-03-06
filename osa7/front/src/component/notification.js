@@ -7,7 +7,6 @@ const Notification = ({ notification }) => {
       <div className="alert">&nbsp;</div>
     )
   }
-
   return (
     <div className={"alert " + notification.type}>
       {notification.message}
@@ -15,11 +14,7 @@ const Notification = ({ notification }) => {
   )
 }
 
-const mapStateToProps = (state) => {
-  return {
-    notification : state.notification
-  }
-}
+const mapStateToProps = (state) => ({ notification : state.notification })
 
 export default connect(
   mapStateToProps
