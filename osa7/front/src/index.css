@@ -1,0 +1,40 @@
+body {
+  box-sizing : border-box;
+  font-family : sans-serif;
+  margin : 0rem 6rem;
+}
+button {
+  background-color : black;
+  border : none;
+  color : white;
+  font-weight : bold;
+  padding : 0.25rem 0.75rem;
+}
+button:hover {
+  background-color : teal;
+  cursor : pointer;
+}
+td {
+  padding : 0.25rem 1rem 0rem 0rem;
+}
+.alert {
+  color : white;
+  margin-top : 0.5rem;
+  padding : 0.5rem 1rem;
+}
+.alert.fail {
+  background-color : #ea634d;
+}
+.alert.success {
+  background-color : teal;
+}
+.blog-entry {
+  background-color : lightgray;
+  border : 1px solid lightgray;
+  margin : 0.25rem 0rem;
+  padding : 0.25rem 0.25rem;
+}
+.blog-entry-details {
+  font-size : 0.9em;
+  padding : 0.5rem 0rem 0rem 2rem;
+}
