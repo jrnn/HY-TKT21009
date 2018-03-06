@@ -1,7 +1,8 @@
 import React from "react"
 import { connect } from "react-redux"
+import { BrowserRouter as Router } from "react-router-dom"
 
-import BlogList from "./component/blog_list"
+import Content from "./component/content"
 import LoginForm from "./component/login_form"
 import Notification from "./component/notification"
 import { checkLoginStatus } from "./reducer/auth_reducer"
@@ -11,13 +12,15 @@ class App extends React.Component {
 
   render() {
     return (
-      <div>
-        <Notification />
-        {this.props.user === null
-          ? <LoginForm />
-          : <BlogList />
-        }
-      </div>
+      <Router>
+        <div>
+          <Notification />
+          {this.props.user === null
+            ? <LoginForm />
+            : <Content />
+          }
+        </div>
+      </Router>
     )
   }
 }
