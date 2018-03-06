@@ -1,16 +1,19 @@
 import React from "react"
+import { connect } from "react-redux"
 
-import Alert from "./component/alert"
 import Blogs from "./component/blogs"
-import blogService from "./service/blog_service"
 import Form from "./component/form"
+import Notification from "./component/notification"
+
+import { setNotification } from "./reducer/notification_reducer"
+
+import blogService from "./service/blog_service"
 import loginService from "./service/login_service"
 
 class App extends React.Component {
   constructor (props) {
     super(props)
     this.state = {
-      alert : null,
       user : null,
       username : "",
       password : ""
@@ -46,15 +49,10 @@ class App extends React.Component {
       this.setState({ user })
 
     } catch (ex) {
-      this.setState({
-        alert : { type : "fail", message : "Invalid username or password" }
-      })
+      this.props.setNotification("Invalid username or password", "fail", 5)
     }
 
     this.setState({ username : "", password : "" })
-    setTimeout(() => {
-      this.setState({ alert : null })
-    }, 5000)
   }
 
   handleLogout = (e) => {
@@ -63,19 +61,13 @@ class App extends React.Component {
     blogService.setToken(null)
     window.localStorage.removeItem("loggedBlogged")
 
-    this.setState({
-      user : null,
-      alert : { type : "success", message : "Now logged out" }
-    })
-    setTimeout(() => {
-      this.setState({ alert : null })
-    }, 5000)
+    this.props.setNotification("Now logged out", "success", 5)
+    this.setState({ user : null })
   }
 
   render() {
     const loginForm = () => (
       <div>
-        <Alert alert={this.state.alert} />
         <h2>Please provide credentials</h2>
         <Form
           handleSubmit={this.handleLogin}
@@ -91,6 +83,7 @@ class App extends React.Component {
 
     return (
       <div>
+        <Notification />
         {this.state.user === null
           ? loginForm()
           : <Blogs user={this.state.user} handleLogout={this.handleLogout} />
@@ -100,4 +93,7 @@ class App extends React.Component {
   }
 }
 
-export default App
+export default connect(
+  null,
+  { setNotification }
+)(App)

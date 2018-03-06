@@ -1,17 +1,19 @@
 import React from "react"
+import { connect } from "react-redux"
 import PropTypes from "prop-types"
 
-import Alert from "./alert"
 import Blog from "./blog"
-import blogService from "../service/blog_service"
 import Form from "./form"
 import Togglable from "./togglable"
+
+import { setNotification } from "../reducer/notification_reducer"
+
+import blogService from "../service/blog_service"
 
 class Blogs extends React.Component {
   constructor(props) {
     super(props)
     this.state = {
-      alert : null,
       blogs : [],
       title : "",
       author : "",
@@ -53,19 +55,13 @@ class Blogs extends React.Component {
       this.addBlog.toggle()
       this.setState({
         title : "", author : "", url : "",
-        blogs : this.state.blogs.concat(blog),
-        alert : { type : "success", message : "New blog added" }
+        blogs : this.state.blogs.concat(blog)
       })
+      this.props.setNotification("New blog added", "success", 5)
 
     } catch (ex) {
-      this.setState({
-        alert : { type : "fail", message : "Check your inputs" }
-      })
+      this.props.setNotification("Check your inputs", "fail", 5)
     }
-
-    setTimeout(() => {
-      this.setState({ alert : null })
-    }, 5000)
   }
 
   remove = async (e) => {
@@ -76,20 +72,12 @@ class Blogs extends React.Component {
       try {
         await blogService.remove(id)
         await this.refreshBlogs()
-        this.setState({
-          alert : { type : "success", message : "Blog successfully deleted" }
-        })
+        this.props.setNotification("Blog successfully deleted", "success", 5)
 
       } catch (ex) {
-        this.setState({
-          alert : { type : "fail", message : "Dayum! Something went wrong" }
-        })
+        this.props.setNotification("Dayum! Something went wrong", "fail", 5)
       }
     }
-
-    setTimeout(() => {
-      this.setState({ alert : null })
-    }, 5000)
   }
 
   render() {
@@ -112,7 +100,6 @@ class Blogs extends React.Component {
     return(
       <div>
         <div>
-          <Alert alert={this.state.alert} />
           <h2>Blogs</h2>
           <p>
             Logged in as {this.state.user.name}&nbsp;
@@ -142,4 +129,7 @@ class Blogs extends React.Component {
   }
 }
 
-export default Blogs
+export default connect(
+  null,
+  { setNotification }
+)(Blogs)
