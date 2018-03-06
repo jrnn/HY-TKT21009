@@ -6,15 +6,13 @@ import Blog from "./blog"
 import Form from "./form"
 import Togglable from "./togglable"
 
+import { addBlog, initBlogs } from "../reducer/blog_reducer"
 import { setNotification } from "../reducer/notification_reducer"
-
-import blogService from "../service/blog_service"
 
 class Blogs extends React.Component {
   constructor(props) {
     super(props)
     this.state = {
-      blogs : [],
       title : "",
       author : "",
       url : "",
@@ -27,36 +25,31 @@ class Blogs extends React.Component {
   }
 
   componentDidMount() {
-    this.refreshBlogs()
+    this.props.initBlogs()
   }
 
-  refreshBlogs() {
-    blogService
-      .findAll()
-      .then(blogs => this.setState({ blogs }))
+  getBlogFromState = () => {
+    let { title, author, url } = this.state
+
+    if (!title || title.length < 3) throw new Error()
+    if (!author || author.length < 3) throw new Error()
+    if (!url || url.length < 3) throw new Error()
+
+    return { title, author, url }
   }
 
-  handleFormChange = (e) => {
+  handleFormChange = (e) =>
     this.setState({ [e.target.name] : e.target.value })
-  }
 
-  add = async (e) => {
+  addBlog = async (e) => {
     e.preventDefault()
 
     try {
-      let blog = await blogService
-        .save({
-          title : this.state.title,
-          author : this.state.author,
-          url : this.state.url
-        })
+      let blog = this.getBlogFromState()
+      this.props.addBlog(blog)
 
-      blog = await blogService.findOne(blog._id)
-      this.addBlog.toggle()
-      this.setState({
-        title : "", author : "", url : "",
-        blogs : this.state.blogs.concat(blog)
-      })
+      this.addBlogForm.toggle()
+      this.setState({ title : "", author : "", url : "" })
       this.props.setNotification("New blog added", "success", 5)
 
     } catch (ex) {
@@ -64,39 +57,7 @@ class Blogs extends React.Component {
     }
   }
 
-  remove = async (e) => {
-    e.preventDefault()
-    let id = e.target.name
-
-    if (window.confirm("Are you sure fo' shizzle?")) {
-      try {
-        await blogService.remove(id)
-        await this.refreshBlogs()
-        this.props.setNotification("Blog successfully deleted", "success", 5)
-
-      } catch (ex) {
-        this.props.setNotification("Dayum! Something went wrong", "fail", 5)
-      }
-    }
-  }
-
   render() {
-    let blogsInOrder = () => (
-      <div>
-        {this.state.blogs
-          .sort(function(b1, b2) { return b2.likes - b1.likes })
-          .map(blog =>
-            <Blog
-              key={blog.id}
-              blog={blog}
-              user={this.state.user}
-              handleRemove={this.remove}
-            />
-          )
-        }
-      </div>
-    )
-
     return(
       <div>
         <div>
@@ -107,20 +68,26 @@ class Blogs extends React.Component {
           </p>
         </div>
         <div>
-          {blogsInOrder()}
+          {this.props.blogs.map(blog =>
+            <Blog
+              key={blog.id}
+              blog={blog}
+              user={this.state.user}
+            />
+          )}
         </div>
         <div>
           <h2>Add new blog</h2>
-          <Togglable button="Add new blog" ref={c => this.addBlog = c}>
+          <Togglable button="Add new blog" ref={c => this.addBlogForm = c}>
             <Form
-              handleSubmit={this.add}
+              handleSubmit={this.addBlog}
               handleField={this.handleFormChange}
               fields={[
                 { type : "text", name : "title", value : this.state.title },
                 { type : "text", name : "author", value : this.state.author },
                 { type : "text", name : "url", value : this.state.url }
               ]}
-              submit="Add blog"
+              submit="Add"
             />
           </Togglable>
         </div>
@@ -129,7 +96,13 @@ class Blogs extends React.Component {
   }
 }
 
+const mapStateToProps = (state) => {
+  return {
+    blogs : state.blogs
+  }
+}
+
 export default connect(
-  null,
-  { setNotification }
+  mapStateToProps,
+  { addBlog, initBlogs, setNotification }
 )(Blogs)

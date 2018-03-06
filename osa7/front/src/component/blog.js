@@ -1,7 +1,9 @@
 import React from "react"
+import { connect } from "react-redux"
 import PropTypes from "prop-types"
 
-import blogService from "../service/blog_service"
+import { deleteBlog, likeBlog } from "../reducer/blog_reducer"
+import { setNotification } from "../reducer/notification_reducer"
 
 class Blog extends React.Component {
   constructor(props) {
@@ -10,34 +12,38 @@ class Blog extends React.Component {
   }
   static propTypes = {
     blog : PropTypes.object.isRequired,
-    user : PropTypes.object.isRequired,
-    handleRemove : PropTypes.func.isRequired
+    user : PropTypes.object.isRequired
   }
 
   toggle = () => {
     this.setState({ details : !this.state.details })
   }
 
-  like = async (e) => {
-    e.preventDefault()
+  remove = async (id) => {
+    if (window.confirm("Are you sure fo' shizzle?")) {
+      try {
+        this.props.deleteBlog(id)
+        this.props.setNotification("Blog successfully deleted", "success", 5)
 
-    this.props.blog.likes = this.props.blog.likes + 1
-    await blogService.update(this.props.blog)
-    this.setState({ key : Math.random() })
+      } catch (ex) {
+        this.props.setNotification("Dayum! Something went wrong", "fail", 5)
+      }
+    }
   }
 
   render() {
+    let { blog } = this.props
+
     let cursor = { cursor : "pointer" }
     let details = { display : this.state.details ? "" : "none" }
-    let addedBy = this.props.blog.user.name
 
     const deleteButton = () => {
-      let blogOwner = this.props.blog.user.username
+      let blogOwner = blog.user.username
 
       if (!blogOwner || blogOwner === this.props.user.username ) {
         return (
           <div className="blog-entry-details">
-            <button name={this.props.blog.id} onClick={this.props.handleRemove}>
+            <button onClick={() => this.remove(blog.id)}>
               Delete
             </button>
           </div>
@@ -50,18 +56,21 @@ class Blog extends React.Component {
     return (
       <div className="blog-entry">
         <div onClick={this.toggle} style={cursor} className="tests-header">
-          {this.props.blog.title} ({this.props.blog.author})
+          {blog.title} ({blog.author})
         </div>
         <div style={details} className="tests-details">
           <div className="blog-entry-details">
-            <a href={this.props.blog.url}>{this.props.blog.url}</a>
+            <a href={blog.url}>{blog.url}</a>
           </div>
           <div className="blog-entry-details">
-            {this.props.blog.likes} likes&nbsp;
-            <button type="submit" onClick={this.like}>Like</button>
+            {blog.likes} likes&nbsp;
+            <button onClick={() => {
+              this.props.likeBlog(this.props.blog)
+              this.setState({ key : Math.random() })
+            }}>Like</button>
           </div>
           <div className="blog-entry-details">
-            added by {addedBy ? addedBy : "anonymous"}
+            added by {blog.user.name ? blog.user.name : "anonymous"}
           </div>
           {deleteButton()}
         </div>
@@ -70,4 +79,7 @@ class Blog extends React.Component {
   }
 }
 
-export default Blog
+export default connect(
+  null,
+  { deleteBlog, likeBlog, setNotification }
+)(Blog)
