@@ -1,5 +1,3 @@
-import blogService from "../service/blog_service"
-
 const sortByLikes = (b1, b2) => (b2.likes - b1.likes)
 
 const blogReducer = (state = [], action) => {
@@ -12,8 +10,8 @@ const blogReducer = (state = [], action) => {
       return state
         .filter(b => b.id !== action.id)
     }
-    case "INIT_BLOGS" : {
-      return action.blogs
+    case "INIT_STATE" : {
+      return action.init.blogs
         .sort(sortByLikes)
     }
     case "LIKE_BLOG" : {
@@ -22,43 +20,12 @@ const blogReducer = (state = [], action) => {
       return [ ...blogs, action.blog ]
         .sort(sortByLikes)
     }
+    case "LOGOUT_USER" : {
+      return []
+    }
     default : {
       return state
     }
-  }
-}
-
-export const addBlog = (blog) => {
-  return async (dispatch) => {
-    blog = await blogService.save(blog)
-    blog = await blogService.findOne(blog._id)
-
-    dispatch({ type : "ADD_BLOG", blog })
-  }
-}
-
-export const deleteBlog = (id) => {
-  return async (dispatch) => {
-    await blogService.remove(id)
-
-    dispatch({ type : "DELETE_BLOG", id })
-  }
-}
-
-export const initBlogs = () => {
-  return async (dispatch) => {
-    let blogs = await blogService.findAll()
-
-    dispatch({ type : "INIT_BLOGS", blogs })
-  }
-}
-
-export const likeBlog = (blog) => {
-  return async (dispatch) => {
-    blog.likes = blog.likes + 1
-    await blogService.update(blog)
-
-    dispatch({ type : "LIKE_BLOG", blog })
   }
 }
 

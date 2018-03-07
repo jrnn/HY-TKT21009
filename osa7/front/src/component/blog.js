@@ -2,8 +2,7 @@ import React from "react"
 import { connect } from "react-redux"
 import PropTypes from "prop-types"
 
-import { deleteBlog, likeBlog } from "../reducer/blog_reducer"
-import { setNotification } from "../reducer/notification_reducer"
+import { deleteBlog, likeBlog, setNotification } from "../reducer/actions"
 
 class Blog extends React.Component {
   constructor(props) {
@@ -37,13 +36,13 @@ class Blog extends React.Component {
   }
 
   render() {
-    let { blog, user } = this.props
+    let { auth, blog } = this.props
     let details = { display : this.state.details ? "" : "none" }
 
     const deleteButton = () => {
       let blogOwner = blog.user.username
 
-      if (!blogOwner || blogOwner === user.username ) {
+      if (!blogOwner || blogOwner === auth.username ) {
         return (
           <div className="blog-entry-details">
             <button onClick={e => this.handleDelete(e, blog.id)}>
@@ -80,7 +79,7 @@ class Blog extends React.Component {
   }
 }
 
-const mapStateToProps = (state) => ({ user : state.user })
+const mapStateToProps = (state) => ({ auth : state.auth })
 
 export default connect(
   mapStateToProps,

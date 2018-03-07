@@ -4,13 +4,9 @@ import { connect } from "react-redux"
 import Blog from "./blog"
 import BlogForm from "./blog_form"
 import Togglable from "./togglable"
-import { logoutUser } from "../reducer/auth_reducer"
-import { initBlogs } from "../reducer/blog_reducer"
-import { setNotification } from "../reducer/notification_reducer"
+import { logoutUser, setNotification } from "../reducer/actions"
 
 class BlogList extends React.Component {
-  componentDidMount = () => this.props.initBlogs()
-
   handleToggle = () => this.formToggler.toggle()
 
   handleLogout = (e) => {
@@ -25,7 +21,7 @@ class BlogList extends React.Component {
         <div>
           <h2>Blogs</h2>
           <p>
-            Logged in as {this.props.user.name}&nbsp;
+            Logged in as {this.props.auth.name}&nbsp;
             <button onClick={this.handleLogout}>Logout</button>
           </p>
         </div>
@@ -50,12 +46,12 @@ class BlogList extends React.Component {
 
 const mapStateToProps = (state) => {
   return {
-    blogs : state.blogs,
-    user : state.user
+    auth : state.auth,
+    blogs : state.blogs
   }
 }
 
 export default connect(
   mapStateToProps,
-  { initBlogs, logoutUser, setNotification }
+  { logoutUser, setNotification }
 )(BlogList)

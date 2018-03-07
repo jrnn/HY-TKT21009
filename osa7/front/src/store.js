@@ -11,9 +11,9 @@ import notificationReducer from "./reducer/notification_reducer"
 import userReducer from "./reducer/user_reducer"
 
 const reducer = combineReducers({
+  auth : authReducer,
   blogs : blogReducer,
   notification : notificationReducer,
-  user : authReducer,
   users : userReducer
 })
 

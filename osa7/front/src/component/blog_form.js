@@ -3,8 +3,7 @@ import { connect } from "react-redux"
 import PropTypes from "prop-types"
 
 import FormField from "./form_field"
-import { addBlog } from "../reducer/blog_reducer"
-import { setNotification } from "../reducer/notification_reducer"
+import { addBlog, setNotification } from "../reducer/actions"
 
 class BlogForm extends React.Component {
   constructor(props) {

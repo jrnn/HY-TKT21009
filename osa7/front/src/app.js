@@ -5,17 +5,17 @@ import { BrowserRouter as Router } from "react-router-dom"
 import Content from "./component/content"
 import LoginForm from "./component/login_form"
 import Notification from "./component/notification"
-import { checkLoginStatus } from "./reducer/auth_reducer"
+import { initState } from "./reducer/actions"
 
 class App extends React.Component {
-  componentDidMount = () => this.props.checkLoginStatus()
+  componentDidMount = () => this.props.initState()
 
   render() {
     return (
       <Router>
         <div>
           <Notification />
-          {this.props.user === null
+          {this.props.auth === null
             ? <LoginForm />
             : <Content />
           }
@@ -25,9 +25,9 @@ class App extends React.Component {
   }
 }
 
-const mapStateToProps = (state) => ({ user : state.user })
+const mapStateToProps = (state) => ({ auth : state.auth })
 
 export default connect(
   mapStateToProps,
-  { checkLoginStatus }
+  { initState }
 )(App)

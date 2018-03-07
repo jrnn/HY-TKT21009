@@ -2,8 +2,7 @@ import React from "react"
 import { connect } from "react-redux"
 
 import FormField from "./form_field"
-import { loginUser } from "../reducer/auth_reducer"
-import { setNotification } from "../reducer/notification_reducer"
+import { loginUser, setNotification } from "../reducer/actions"
 
 class LoginForm extends React.Component {
   constructor() {
