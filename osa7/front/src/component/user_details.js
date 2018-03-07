@@ -26,7 +26,7 @@ class UserDetails extends React.Component {
     let { user } = this.props
 
     if (!user)
-      return(null)
+      return null
     else
       return(
         <div>

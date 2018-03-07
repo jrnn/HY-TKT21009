@@ -4,16 +4,14 @@ import PropTypes from "prop-types"
 
 import { deleteBlog, likeBlog, setNotification } from "../reducer/actions"
 
-class Blog extends React.Component {
+class BlogDetails extends React.Component {
   constructor(props) {
     super(props)
-    this.state = { details : false, key : 0 }
+    this.state = { key : 0 }
   }
   static propTypes = {
-    blog : PropTypes.object.isRequired
+    id : PropTypes.string.isRequired
   }
-
-  handleToggle = () => this.setState({ details : !this.state.details })
 
   handleDelete = async (e, id) => {
     e.preventDefault()
@@ -22,9 +20,10 @@ class Blog extends React.Component {
       try {
         await this.props.deleteBlog(id)
         this.props.setNotification("Blog successfully deleted. Hooray!", "success", 5)
+        this.props.history.push("/")
 
       } catch (ex) {
-        this.props.setNotification("Dayum! Something went wrong.", "fail", 5)
+        this.props.setNotification("Dayum! Something went kaputt.", "fail", 5)
       }
     }
   }
@@ -37,51 +36,51 @@ class Blog extends React.Component {
 
   render() {
     let { auth, blog } = this.props
-    let details = { display : this.state.details ? "" : "none" }
 
     const deleteButton = () => {
       let blogOwner = blog.user.username
 
-      if (!blogOwner || blogOwner === auth.username ) {
+      if (!blogOwner || blogOwner === auth.username )
         return (
-          <div className="blog-entry-details">
-            <button onClick={e => this.handleDelete(e, blog.id)}>
-              Delete
-            </button>
-          </div>
+          <button onClick={e => this.handleDelete(e, blog.id)}>
+            Delete
+          </button>
         )
-      }
-
-      return(<div className="blog-entry-details"></div>)
+      else
+        return null
     }
 
-    return (
-      <div className="blog-entry">
-        <div
-          onClick={this.handleToggle}
-          style={{ cursor : "pointer" }}
-        >{blog.title} ({blog.author})</div>
-        <div style={details}>
-          <div className="blog-entry-details">
+    if (!blog)
+      return null
+    else
+      return (
+        <div>
+          <h2>{blog.title}</h2>
+          <h4>authored by {blog.author}</h4>
+          <p>
             <a href={blog.url}>{blog.url}</a>
-          </div>
-          <div className="blog-entry-details">
+          </p>
+          <p>
             {blog.likes} likes&nbsp;
             <button onClick={this.handleLike}>Like</button>
-          </div>
-          <div className="blog-entry-details">
+          </p>
+          <p>
             Added by {blog.user.name ? blog.user.name : "anonymous"}
-          </div>
+          </p>
           {deleteButton()}
         </div>
-      </div>
-    )
+      )
   }
 }
 
-const mapStateToProps = (state) => ({ auth : state.auth })
+const mapStateToProps = (state, props) => {
+  return {
+    auth : state.auth,
+    blog : state.blogs.find(b => b.id === props.id)
+  }
+}
 
 export default connect(
   mapStateToProps,
   { deleteBlog, likeBlog, setNotification }
-)(Blog)
+)(BlogDetails)

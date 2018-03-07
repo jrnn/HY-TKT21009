@@ -1,26 +1,23 @@
 import React from "react"
 import { connect } from "react-redux"
-import { BrowserRouter as Router } from "react-router-dom"
 
-import Content from "./component/content"
+import ContentContainer from "./component/content_container"
 import LoginForm from "./component/login_form"
 import Notification from "./component/notification"
-import { initState } from "./reducer/actions"
+import { checkAuth } from "./reducer/actions"
 
 class App extends React.Component {
-  componentDidMount = () => this.props.initState()
+  componentDidMount = () => this.props.checkAuth()
 
   render() {
     return (
-      <Router>
-        <div>
-          <Notification />
-          {this.props.auth === null
-            ? <LoginForm />
-            : <Content />
-          }
-        </div>
-      </Router>
+      <div>
+        <Notification />
+        {this.props.auth === null
+          ? <LoginForm />
+          : <ContentContainer />
+        }
+      </div>
     )
   }
 }
@@ -29,5 +26,5 @@ const mapStateToProps = (state) => ({ auth : state.auth })
 
 export default connect(
   mapStateToProps,
-  { initState }
+  { checkAuth }
 )(App)

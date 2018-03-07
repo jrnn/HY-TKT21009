@@ -11,6 +11,8 @@ export const addBlog = (blog) => {
   }
 }
 
+export const checkAuth = () => ({ type : "CHECK_AUTH" })
+
 export const deleteBlog = (id) => {
   return async (dispatch) => {
     await blogService.remove(id)
@@ -21,8 +23,6 @@ export const deleteBlog = (id) => {
 
 export const initState = () => {
   return async (dispatch) => {
-    dispatch({ type : "CHECK_AUTH" })
-
     let blogs = await blogService.findAll()
     let users = await userService.findAll()
 

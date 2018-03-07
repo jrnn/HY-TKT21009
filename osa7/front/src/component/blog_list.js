@@ -1,7 +1,7 @@
 import React from "react"
 import { connect } from "react-redux"
+import { Link } from "react-router-dom"
 
-import Blog from "./blog"
 import BlogForm from "./blog_form"
 import Togglable from "./togglable"
 import { logoutUser, setNotification } from "../reducer/actions"
@@ -26,9 +26,26 @@ class BlogList extends React.Component {
           </p>
         </div>
         <div>
-          {this.props.blogs.map(blog =>
-            <Blog key={blog.id} blog={blog} />
-          )}
+          <table>
+            <thead>
+              <tr>
+                <th>Title</th>
+                <th>Author</th>
+                <th>Likes</th>
+              </tr>
+            </thead>
+            <tbody>
+              {this.props.blogs.map(b =>
+                <tr key={b.id}>
+                  <td>
+                    <Link to={`/blogs/${b.id}`}>{b.title}</Link>
+                  </td>
+                  <td>{b.author}</td>
+                  <td>{b.likes}</td>
+                </tr>
+              )}
+            </tbody>
+          </table>
         </div>
         <div>
           <h2>Add new blog</h2>
