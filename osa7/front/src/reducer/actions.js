@@ -11,6 +11,15 @@ export const addBlog = (blog) => {
   }
 }
 
+export const addUser = (user) => {
+  return async (dispatch) => {
+    user = await userService.save(user)
+    user = await userService.findOne(user.id)
+
+    dispatch({ type : "ADD_USER", user })
+  }
+}
+
 export const checkAuth = () => ({ type : "CHECK_AUTH" })
 
 export const deleteBlog = (id) => {

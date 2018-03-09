@@ -13,4 +13,10 @@ const findOne = async (id) => {
   return res.data
 }
 
-export default { findAll, findOne }
+const save = async (user) => {
+  let res = await axios.post(url, user)
+
+  return res.data
+}
+
+export default { findAll, findOne, save }

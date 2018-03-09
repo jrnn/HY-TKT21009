@@ -3,25 +3,25 @@ import { connect } from "react-redux"
 import PropTypes from "prop-types"
 
 import FormField from "./form_field"
-import { addBlog, setNotification } from "../reducer/actions"
+import { addUser, setNotification } from "../reducer/actions"
 
-class BlogForm extends React.Component {
+class UserForm extends React.Component {
   constructor(props) {
     super(props)
-    this.state = { title : "", author : "", url : "" }
+    this.state = { username : "", name : "", password : "" }
   }
   static propTypes = {
     toggleForm : PropTypes.func.isRequired
   }
 
-  getBlogFromState = () => {
-    let { title, author, url } = this.state
+  getUserFromState = () => {
+    let { username, name, password } = this.state
 
-    if (!title || title.length < 3) throw new Error()
-    if (!author || author.length < 3) throw new Error()
-    if (!url || url.length < 3) throw new Error()
+    if (!username || username.length < 3) throw new Error()
+    if (!name || name.length < 3) throw new Error()
+    if (!password || password.length < 3) throw new Error()
 
-    return { title, author, url }
+    return { username, name, password }
   }
 
   handleFieldChange = (e) =>
@@ -31,12 +31,12 @@ class BlogForm extends React.Component {
     e.preventDefault()
 
     try {
-      let blog = this.getBlogFromState()
-      await this.props.addBlog(blog)
+      let user = this.getUserFromState()
+      await this.props.addUser(user)
 
-      this.setState({ title : "", author : "", url : "" })
+      this.setState({ username : "", name : "", password : "" })
       this.props.toggleForm()
-      this.props.setNotification("New blog added. Hooray!", "success", 5)
+      this.props.setNotification("New user added. Happy hacking!", "success", 5)
 
     } catch (ex) {
       this.props.setNotification("Oops! Check your inputs.", "fail", 5)
@@ -49,24 +49,24 @@ class BlogForm extends React.Component {
         <table>
           <tbody>
             <FormField
-              label="Title:"
+              label="Username:"
               type="text"
-              name="title"
-              value={this.state.title}
+              name="username"
+              value={this.state.username}
               onChange={this.handleFieldChange}
             />
             <FormField
-              label="Author:"
+              label="Name:"
               type="text"
-              name="author"
-              value={this.state.author}
+              name="name"
+              value={this.state.name}
               onChange={this.handleFieldChange}
             />
             <FormField
-              label="URL:"
+              label="Password:"
               type="text"
-              name="url"
-              value={this.state.url}
+              name="password"
+              value={this.state.password}
               onChange={this.handleFieldChange}
             />
             <tr>
@@ -83,5 +83,5 @@ class BlogForm extends React.Component {
 
 export default connect(
   null,
-  { addBlog, setNotification }
-)(BlogForm)
+  { addUser, setNotification }
+)(UserForm)

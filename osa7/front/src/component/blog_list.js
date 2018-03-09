@@ -9,7 +9,7 @@ class BlogList extends React.Component {
   handleToggle = () => this.formToggler.toggle()
 
   render() {
-    return(
+    return (
       <div>
         <h2>Blogs</h2>
         <table>
