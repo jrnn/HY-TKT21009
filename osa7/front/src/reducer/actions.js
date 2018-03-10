@@ -11,6 +11,15 @@ export const addBlog = (blog) => {
   }
 }
 
+export const addComment = (id, comment) => {
+  return async (dispatch) => {
+    await blogService.saveComment(id, comment)
+    let blog = await blogService.findOne(id)
+
+    dispatch({ type : "REPLACE_BLOG", blog })
+  }
+}
+
 export const addUser = (user) => {
   return async (dispatch) => {
     user = await userService.save(user)
@@ -47,7 +56,7 @@ export const likeBlog = (blog) => {
     blog.likes = blog.likes + 1
     await blogService.update(blog)
 
-    dispatch({ type : "LIKE_BLOG", blog })
+    dispatch({ type : "REPLACE_BLOG", blog })
   }
 }
 

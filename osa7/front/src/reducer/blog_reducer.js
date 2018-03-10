@@ -14,14 +14,14 @@ const blogReducer = (state = [], action) => {
       return action.init.blogs
         .sort(sortByLikes)
     }
-    case "LIKE_BLOG" : {
+    case "LOGOUT_USER" : {
+      return []
+    }
+    case "REPLACE_BLOG" : {
       let blogs = state
         .filter(b => b.id !== action.blog.id)
       return [ ...blogs, action.blog ]
         .sort(sortByLikes)
-    }
-    case "LOGOUT_USER" : {
-      return []
     }
     default : {
       return state

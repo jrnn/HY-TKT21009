@@ -1,17 +1,33 @@
 import React from "react"
 import { connect } from "react-redux"
-import { Button, Segment } from "semantic-ui-react"
+import { Button, Form, Segment } from "semantic-ui-react"
 import PropTypes from "prop-types"
 
-import { deleteBlog, likeBlog, setNotification } from "../reducer/actions"
+import {
+  addComment, deleteBlog, likeBlog, setNotification
+} from "../reducer/actions"
 
 class BlogDetails extends React.Component {
   constructor(props) {
     super(props)
-    this.state = { key : 0 }
+    this.state = { comment : "", key : 0 }
   }
   static propTypes = {
     id : PropTypes.string.isRequired
+  }
+
+  handleComment = async (e, id) => {
+    e.preventDefault()
+
+    try {
+      let comment = this.state.comment.trim()
+      await this.props.addComment(id, comment)
+      this.props.setNotification("Comment added. Exciting!", "success", 5)
+      this.setState({ comment : "" })
+
+    } catch (ex) {
+      this.props.setNotification("What kind of comment is that supposed to be?", "fail", 5)
+    }
   }
 
   handleDelete = async (e, id) => {
@@ -28,6 +44,9 @@ class BlogDetails extends React.Component {
       }
     }
   }
+
+  handleFieldChange = (e) =>
+    this.setState({ [e.target.name] : e.target.value })
 
   handleLike = async (e) => {
     e.preventDefault()
@@ -91,6 +110,18 @@ class BlogDetails extends React.Component {
           <Segment.Group>
             <Segment><strong>Comments</strong></Segment>
             {comments()}
+            <Segment>
+              <Form onSubmit={e => this.handleComment(e, blog.id)}>
+                <Form.Input
+                  action="Add"
+                  fluid
+                  name="comment"
+                  onChange={this.handleFieldChange}
+                  placeholder="Write your comment here ..."
+                  value={this.state.comment}
+                />
+              </Form>
+            </Segment>
           </Segment.Group>
         </div>
       )
@@ -106,5 +137,5 @@ const mapStateToProps = (state, props) => {
 
 export default connect(
   mapStateToProps,
-  { deleteBlog, likeBlog, setNotification }
+  { addComment, deleteBlog, likeBlog, setNotification }
 )(BlogDetails)

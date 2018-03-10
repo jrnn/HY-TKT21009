@@ -25,6 +25,10 @@ const save = async (blog) => {
   return res.data
 }
 
+const saveComment = async (id, comment) => {
+  await axios.post(url + `/${id}/comments`, { comment })
+}
+
 const update = async (blog) => {
   await axios.put(url + `/${blog.id}`, { likes : blog.likes })
 }
@@ -34,4 +38,6 @@ const remove = async (id) => {
   await axios.delete(url + `/${id}`, config)
 }
 
-export default { findAll, findOne, remove, save, setToken, update }
+export default {
+  findAll, findOne, remove, save, saveComment, setToken, update
+}
