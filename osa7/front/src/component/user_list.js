@@ -1,6 +1,7 @@
 import React from "react"
 import { connect } from "react-redux"
 import { Link } from "react-router-dom"
+import { List } from "semantic-ui-react"
 
 import Togglable from "./togglable"
 import UserForm from "./user_form"
@@ -11,34 +12,27 @@ class UserList extends React.Component {
   render () {
     return (
       <div>
-        <h2>Users</h2>
-        <table>
-          <thead>
-            <tr>
-              <th>Name</th>
-              <th>Blogs added</th>
-            </tr>
-          </thead>
-          <tbody>
-            {this.props.users.map(u =>
-              <tr key={u.id}>
-                <td>
+        <h2 className="padded">Users</h2>
+        <Togglable
+          buttonLabel="Add new user"
+          ref={component => this.formToggler = component}
+        >
+          <UserForm toggleForm={this.handleToggle} />
+        </Togglable>
+        <List divided relaxed>
+          {this.props.users.map(u =>
+            <List.Item key={u.id}>
+              <List.Content>
+                <List.Header>
                   <Link to={`/users/${u.id}`}>{u.name}</Link>
-                </td>
-                <td>{u.blogs.length}</td>
-              </tr>
-            )}
-          </tbody>
-        </table>
-        <div>
-          <h2>Add new user</h2>
-          <Togglable
-            buttonLabel="Add new user"
-            ref={component => this.formToggler = component}
-          >
-            <UserForm toggleForm={this.handleToggle} />
-          </Togglable>
-        </div>
+                </List.Header>
+                <List.Description>
+                  Added blogs: {u.blogs.length}
+                </List.Description>
+              </List.Content>
+            </List.Item>
+          )}
+        </List>
       </div>
     )
   }

@@ -1,8 +1,8 @@
 import React from "react"
 import { connect } from "react-redux"
+import { Button, Form } from "semantic-ui-react"
 import PropTypes from "prop-types"
 
-import FormField from "./form_field"
 import { addBlog, setNotification } from "../reducer/actions"
 
 class BlogForm extends React.Component {
@@ -45,38 +45,36 @@ class BlogForm extends React.Component {
 
   render () {
     return (
-      <form onSubmit={this.handleAdd}>
-        <table>
-          <tbody>
-            <FormField
-              label="Title:"
-              type="text"
-              name="title"
-              value={this.state.title}
-              onChange={this.handleFieldChange}
-            />
-            <FormField
-              label="Author:"
-              type="text"
-              name="author"
-              value={this.state.author}
-              onChange={this.handleFieldChange}
-            />
-            <FormField
-              label="URL:"
-              type="text"
-              name="url"
-              value={this.state.url}
-              onChange={this.handleFieldChange}
-            />
-            <tr>
-              <td>
-                <button>Add</button>
-              </td>
-            </tr>
-          </tbody>
-        </table>
-      </form>
+      <Form onSubmit={this.handleAdd} className="padded">
+        <Form.Field>
+          <input
+            type="text"
+            name="title"
+            placeholder="Title"
+            value={this.state.title}
+            onChange={this.handleFieldChange}
+          />
+        </Form.Field>
+        <Form.Field>
+          <input
+            type="text"
+            name="author"
+            placeholder="Author"
+            value={this.state.author}
+            onChange={this.handleFieldChange}
+          />
+        </Form.Field>
+        <Form.Field>
+          <input
+            type="text"
+            name="url"
+            placeholder="URL"
+            value={this.state.url}
+            onChange={this.handleFieldChange}
+          />
+        </Form.Field>
+        <Button content="Add" fluid />
+      </Form>
     )
   }
 }

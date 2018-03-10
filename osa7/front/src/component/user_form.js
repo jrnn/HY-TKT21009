@@ -1,8 +1,8 @@
 import React from "react"
 import { connect } from "react-redux"
+import { Button, Form } from "semantic-ui-react"
 import PropTypes from "prop-types"
 
-import FormField from "./form_field"
 import { addUser, setNotification } from "../reducer/actions"
 
 class UserForm extends React.Component {
@@ -45,38 +45,36 @@ class UserForm extends React.Component {
 
   render () {
     return (
-      <form onSubmit={this.handleAdd}>
-        <table>
-          <tbody>
-            <FormField
-              label="Username:"
-              type="text"
-              name="username"
-              value={this.state.username}
-              onChange={this.handleFieldChange}
-            />
-            <FormField
-              label="Name:"
-              type="text"
-              name="name"
-              value={this.state.name}
-              onChange={this.handleFieldChange}
-            />
-            <FormField
-              label="Password:"
-              type="text"
-              name="password"
-              value={this.state.password}
-              onChange={this.handleFieldChange}
-            />
-            <tr>
-              <td>
-                <button>Add</button>
-              </td>
-            </tr>
-          </tbody>
-        </table>
-      </form>
+      <Form onSubmit={this.handleAdd} className="padded">
+        <Form.Field>
+          <input
+            type="text"
+            name="username"
+            placeholder="Username"
+            value={this.state.username}
+            onChange={this.handleFieldChange}
+          />
+        </Form.Field>
+        <Form.Field>
+          <input
+            type="text"
+            name="name"
+            placeholder="Name"
+            value={this.state.name}
+            onChange={this.handleFieldChange}
+          />
+        </Form.Field>
+        <Form.Field>
+          <input
+            type="text"
+            name="password"
+            placeholder="Password"
+            value={this.state.password}
+            onChange={this.handleFieldChange}
+          />
+        </Form.Field>
+        <Button content="Add" fluid />
+      </Form>
     )
   }
 }

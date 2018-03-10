@@ -1,5 +1,6 @@
 import React from "react"
 import { connect } from "react-redux"
+import { Segment } from "semantic-ui-react"
 import PropTypes from "prop-types"
 
 class UserDetails extends React.Component {
@@ -8,33 +9,40 @@ class UserDetails extends React.Component {
   }
 
   render() {
-    const addedBlogs = (blogs) => {
-      let i = 0
-
-      return (
-        <div>
-          <h3>Added blogs</h3>
-          <ul>
-            {blogs.map(blog =>
-              <li key={i++}>{blog.title} by {blog.author}</li>
-            )}
-          </ul>
-        </div>
-      )
-    }
-
+    let i = 0
     let { user } = this.props
+
+    const noBlogs = () => (
+      <Segment textAlign="center">
+        <em>No blogs under this user&#39;s ownership!</em>
+      </Segment>
+    )
+
+    const addedBlogs = (blogs) => (
+      <Segment>
+        <h3>Added blogs</h3>
+        <Segment.Group>
+          {blogs.map(blog =>
+            <Segment key={i++}>
+              <em>{blog.title}</em> by {blog.author}
+            </Segment>
+          )}
+        </Segment.Group>
+      </Segment>
+    )
 
     if (!user)
       return null
     else
       return(
         <div>
-          <h2>{user.name}</h2>
-          {user.blogs.length === 0
-            ? <h3>No blogs under this user&#39;s ownership!</h3>
-            : addedBlogs(user.blogs)
-          }
+          <h2 className="padded">{user.name}</h2>
+          <Segment.Group>
+            {user.blogs.length === 0
+              ? noBlogs()
+              : addedBlogs(user.blogs)
+            }
+          </Segment.Group>
         </div>
       )
   }

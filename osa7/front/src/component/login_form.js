@@ -1,7 +1,7 @@
 import React from "react"
 import { connect } from "react-redux"
+import { Button, Form } from "semantic-ui-react"
 
-import FormField from "./form_field"
 import { loginUser, setNotification } from "../reducer/actions"
 
 class LoginForm extends React.Component {
@@ -30,32 +30,28 @@ class LoginForm extends React.Component {
   render() {
     return (
       <div>
-        <h2>Please provide credentials</h2>
-        <form onSubmit={this.handleLogin}>
-          <table>
-            <tbody>
-              <FormField
-                label="Username:"
-                type="text"
-                name="username"
-                value={this.state.username}
-                onChange={this.handleFieldChange}
-              />
-              <FormField
-                label="Password:"
-                type="password"
-                name="password"
-                value={this.state.password}
-                onChange={this.handleFieldChange}
-              />
-              <tr>
-                <td>
-                  <button>Login</button>
-                </td>
-              </tr>
-            </tbody>
-          </table>
-        </form>
+        <h2 className="padded">Please provide credentials</h2>
+        <Form onSubmit={this.handleLogin}>
+          <Form.Field>
+            <input
+              type="text"
+              name="username"
+              placeholder="Username"
+              value={this.state.username}
+              onChange={this.handleFieldChange}
+            />
+          </Form.Field>
+          <Form.Field>
+            <input
+              type="password"
+              name="password"
+              placeholder="Password"
+              value={this.state.password}
+              onChange={this.handleFieldChange}
+            />
+          </Form.Field>
+          <Button content="Login" fluid />
+        </Form>
       </div>
     )
   }

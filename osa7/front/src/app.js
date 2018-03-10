@@ -1,5 +1,6 @@
 import React from "react"
 import { connect } from "react-redux"
+import { Container } from "semantic-ui-react"
 
 import ContentContainer from "./component/content_container"
 import LoginForm from "./component/login_form"
@@ -11,13 +12,13 @@ class App extends React.Component {
 
   render() {
     return (
-      <div>
+      <Container className="padded">
         <Notification />
         {this.props.auth === null
           ? <LoginForm />
           : <ContentContainer />
         }
-      </div>
+      </Container>
     )
   }
 }

@@ -1,16 +1,21 @@
 import React from "react"
 import { connect } from "react-redux"
+import { Message } from "semantic-ui-react"
 
 const Notification = ({ notification }) => {
-  if (!notification) {
+  if (!notification) return null
+
+  if (notification.type === "fail") {
     return (
-      <div className="alert">&nbsp;</div>
+      <Message negative>
+        <Message.Header>{notification.message}</Message.Header>
+      </Message>
     )
   }
   return (
-    <div className={"alert " + notification.type}>
-      {notification.message}
-    </div>
+    <Message positive>
+      <Message.Header>{notification.message}</Message.Header>
+    </Message>
   )
 }
 

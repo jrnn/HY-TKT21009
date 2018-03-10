@@ -1,5 +1,6 @@
 import React from "react"
 import { connect } from "react-redux"
+import { Button, Segment } from "semantic-ui-react"
 import PropTypes from "prop-types"
 
 import { deleteBlog, likeBlog, setNotification } from "../reducer/actions"
@@ -42,9 +43,10 @@ class BlogDetails extends React.Component {
 
       if (!blogOwner || blogOwner === auth.username )
         return (
-          <button onClick={e => this.handleDelete(e, blog.id)}>
-            Delete
-          </button>
+          <Button
+            content="Delete!"
+            onClick={e => this.handleDelete(e, blog.id)}
+          />
         )
       else
         return null
@@ -55,19 +57,21 @@ class BlogDetails extends React.Component {
     else
       return (
         <div>
-          <h2>{blog.title}</h2>
-          <h4>authored by {blog.author}</h4>
-          <p>
-            <a href={blog.url}>{blog.url}</a>
-          </p>
-          <p>
-            {blog.likes} likes&nbsp;
-            <button onClick={this.handleLike}>Like</button>
-          </p>
-          <p>
-            Added by {blog.user.name ? blog.user.name : "anonymous"}
-          </p>
-          {deleteButton()}
+          <h2 className="padded">{blog.title}</h2>
+          <Segment.Group>
+            <Segment>Authored by <strong>{blog.author}</strong></Segment>
+            <Segment>
+              More info at <a href={blog.url}>{blog.url}</a>
+            </Segment>
+            <Segment>{blog.likes} likes</Segment>
+            <Segment>
+              Added by <strong>{blog.user.name ? blog.user.name : "anonymous"}</strong>
+            </Segment>
+          </Segment.Group>
+          <div>
+            <Button content="I like this!" onClick={this.handleLike} />
+            {deleteButton()}
+          </div>
         </div>
       )
   }
