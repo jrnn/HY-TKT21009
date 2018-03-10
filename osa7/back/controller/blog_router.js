@@ -91,6 +91,39 @@ blogRouter.post("/", async (req, res) => {
   }
 })
 
+blogRouter.post("/:id/comments", async (req, res) => {
+  try {
+    let id = req.params.id
+    let comment = req.body.comment.trim()
+    let timeStamp = Math.round(new Date().getTime() / 1000)
+
+    if (!comment || comment.length < 1)
+      throw { message : "invalid comment" }
+
+    let blog = await Blog.findById(id)
+    let comments = (!blog.comments)
+      ? []
+      : blog.comments
+
+    comments.push({ timeStamp, comment })
+    console.log("DEBUGGING. COMMENTS =", comments)
+    blog = await Blog
+      .findByIdAndUpdate(id, { comments }, { new : true })
+
+    if (!blog) res
+      .status(404).end()
+    else res
+      .json(blog)
+
+  } catch (ex) {
+    console.log(`Error @ POST /api/blogs/${req.params.id}/comments :`, ex.message)
+
+    res
+      .status(400)
+      .send({ error : ex.message })
+  }
+})
+
 blogRouter.put("/:id", async (req, res) => {
   try {
     let likes = Math.floor(req.body.likes)

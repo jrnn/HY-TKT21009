@@ -52,6 +52,22 @@ class BlogDetails extends React.Component {
         return null
     }
 
+    const comments = () => {
+      if (blog.comments.length > 0)
+        return (
+          <Segment.Group>
+            {blog.comments.map(c =>
+              <Segment
+                key={c.timeStamp}
+                content={c.comment}
+              />
+            )}
+          </Segment.Group>
+        )
+      else
+        return null
+    }
+
     if (!blog)
       return null
     else
@@ -72,6 +88,10 @@ class BlogDetails extends React.Component {
             <Button content="I like this!" onClick={this.handleLike} />
             {deleteButton()}
           </div>
+          <Segment.Group>
+            <Segment><strong>Comments</strong></Segment>
+            {comments()}
+          </Segment.Group>
         </div>
       )
   }
